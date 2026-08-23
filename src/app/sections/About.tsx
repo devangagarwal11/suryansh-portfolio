@@ -54,32 +54,38 @@ export const About = () => {
     { 
       role: "Video Editor", 
       company: "Advanced Agent Mrketing", 
+      loaction: "Greensboro, United States of America",
       desc: "Created performance-driven video ads that generated qualified client appointments and achieved high CTRs through conversion-focused editing, compelling storytelling, and continuous creative optimization."
     },
     { 
       role: "Video Editor", 
       company: "Modulate", 
+      loaction: "Somerville, United States of America",
       desc: "Translated complex audio-related problems, solutions, and technical services into clear, engaging motion graphics and explainer videos, making sophisticated concepts easy to understand and visually compelling."
     },
     { 
       role: "Video Editor", 
-      company: "Remotestar", 
+      company: "Remotestar",
+      loaction: "United Kingdom",
       desc: "Edited engaging digital video content with strong storytelling, pacing, sound design, transitions, and platform-focused visual optimization."
     },
     { 
       role: "Video Editor", 
-      company: "Pocket FM", 
+      company: "Pocket FM",
+      loaction: "Banglore, India",
       desc: "Part of the French content team, producing AI-assisted video episodes across multiple shows while maintaining narrative consistency, visual quality, and high-volume content production."
     },
     { 
       role: "Lead Video Editor", 
-      company: "FRND app", 
+      company: "FRND app",
+      loaction: "Banglore India",
       desc: "Led the PlayChat POD as Lead Video Editor, delivering expert-level DTC ad creatives and AI-powered video content; produced top-performing winning ads on Meta through performance-driven creative strategy, rapid testing, and conversion-focused editing."
     },
     { 
       role: "Video Editor & Designer", 
-      company: "Freelancing", 
-      desc: "Delivering visual content for brands including Club 17, Forest Club, and various international clients."
+      company: "Freelancing",
+      loaction: "", 
+      desc: "Billion dollar brands. The United Nations. A screen in Times Square. My edits have driven $100 million plus in sales, and that is the number I cut for. Retention and conversion first, polish second."
     },
   ];
 
@@ -225,9 +231,9 @@ export const About = () => {
                         <span className="text-base text-white/40 group-hover:text-white/60 transition-colors">
                           {exp.role}
                         </span>
-                        {/* <span className="text-sm font-mono text-white/10 group-hover:text-white/30 transition-colors uppercase whitespace-nowrap">
-                          {exp.year}
-                        </span> */}
+                        <span className="text-sm font-mono text-white/10 group-hover:text-white/30 transition-colors uppercase whitespace-nowrap">
+                          {exp.location}
+                        </span>
                       </div>
                     </div>
                   ))}
