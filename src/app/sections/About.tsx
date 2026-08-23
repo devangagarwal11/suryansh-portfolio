@@ -54,13 +54,13 @@ export const About = () => {
     { 
       role: "Video Editor", 
       company: "Advanced Agent Mrketing", 
-      loaction: "Greensboro, United States of America",
+      loaction: "Greensboro, USA",
       desc: "Created performance-driven video ads that generated qualified client appointments and achieved high CTRs through conversion-focused editing, compelling storytelling, and continuous creative optimization."
     },
     { 
       role: "Video Editor", 
       company: "Modulate", 
-      loaction: "Somerville, United States of America",
+      loaction: "Somerville, USA",
       desc: "Translated complex audio-related problems, solutions, and technical services into clear, engaging motion graphics and explainer videos, making sophisticated concepts easy to understand and visually compelling."
     },
     { 
@@ -232,7 +232,7 @@ export const About = () => {
                           {exp.role}
                         </span>
                         <span className="text-sm font-mono text-white/10 group-hover:text-white/30 transition-colors uppercase whitespace-nowrap">
-                          {exp.location}
+                          {exp.loaction}
                         </span>
                       </div>
                     </div>
