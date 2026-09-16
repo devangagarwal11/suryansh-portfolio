@@ -12,7 +12,6 @@ interface FeaturedVideo {
 }
 
 const featuredVideos: FeaturedVideo[] = [
-  { id: "feat-1", title: "SAAS Product Demo", category: "SAAS", videoId: "mIf5Fmr8t2E" },
   { id: "feat-2", title: "Animated Cartoon Feature", category: "Cartoon", videoId: "B3Yjbh1rXqg" },
   { id: "feat-3", title: "Performance Marketing", category: "Edits", videoId: "ICPDfLbCpSo" },
   { id: "feat-4", title: "AI Storytelling", category: "AI Story", videoId: "rQwvy-Tbx1A" },

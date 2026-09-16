@@ -250,17 +250,12 @@ const AllWork = () => {
           name: "Talking head Videos",
           items: [
             { id: "adv-v-1", title: "High-Impact Social Ad", tag: "Advertising", type: "youtube", videoId: "-MhFhPmehbg", isVertical: true },
-            // { id: "adv-v-2", title: "Performance Marketing", tag: "Performance", type: "youtube", videoId: "ICPDfLbCpSo" },
-            { id: "adv-v-3", title: "Brand Story Concept", tag: "Social", type: "youtube", videoId: "2lg3x2LiC6E", isVertical: true },
             { id: "adv-v-4", title: "AI Storytelling 03", tag: "Story", type: "youtube", videoId: "rQwvy-Tbx1A", isSquare: true },
-            { id: "adv-v-5", title: "Performance Marketing", tag: "Performance", type: "youtube", videoId: "mIf5Fmr8t2E" },
             { id: "adv-v-7", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504561/coasty_ai_1_1.mp4"},
             { id: "adv-v-8", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504413/coaching.mp4"},
             { id: "adv-v-9", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504409/RAM.mp4"},
-            // { id: "adv-v-10", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504408/high_paying_skill_final.mp4"},
-            // { id: "adv-v-11", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504407/Dragon_Fruit_Extended_6-2.mp4"},
             { id: "adv-v-12", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504407/watch.mp4"},
-            { id: "adv-v-6", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504559/modulate_V2_V2_1.mp4", isVertical: true},
+            // { id: "adv-v-6", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504559/modulate_V2_V2_1.mp4", isVertical: true},
           ]
         },
         {
