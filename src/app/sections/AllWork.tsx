@@ -207,16 +207,12 @@ const AllWork = () => {
           name: "AI/DTC",
           items: [
             { id: "ai-adv-1", title: "Visual Storytelling", tag: "Visual", type: "youtube", videoId: "_-egdW6Ca5Y", isVertical: true },
-            // { id: "ai-adv-2", title: "Product Advertisement 02", tag: "Ad", type: "youtube", videoId: "u2MwVays7fo", isVertical: true },
-            // { id: "ai-adv-3", title: "Motion Design Concept", tag: "Motion", type: "youtube", videoId: "DU68DVJCTq4", isVertical: true },
-            // { id: "ai-adv-4", title: "Dynamic Ad Piece", tag: "Dynamic", type: "youtube", videoId: "tLD5PONeyzo", isVertical: true },
             { id: "ai-adv-5", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "sJhBE6H2PMY", isVertical: true },
-            // { id: "ai-adv-6", title: "Mountain Vista Cinematic", tag: "Cinematic", type: "youtube", videoId: "VHdLncCBl9M" },
-            { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787501636/GROUNDING-6362-H2-R2.mp4", isVertical: true },
-            { id: "ai-adv-8", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787501826/GROUNDING-6384-H2.mp4", isVertical: true },
-            { id: "ai-adv-9", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787501829/Hook1.mp4", isVertical: true },
-            { id: "ai-adv-10", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787501833/Tank_Complete_Final_1.0.mp4", isVertical: true },
-            { id: "ai-adv-11", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787501927/silent_ball_hook_2_1.mp4", isVertical: true },
+            { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789548674/UGC_26_Huevia_V2.mp4", isVertical: true },
+            { id: "ai-adv-8", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789548709/HOOK_3_1.mp4", isVertical: true },
+            { id: "ai-adv-9", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789548706/VIDEO-1_1.mp4", isVertical: true },
+            { id: "ai-adv-10", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789548710/VIDEO-2_1.mp4", isVertical: true },
+            { id: "ai-adv-11", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789548715/VIDEO-4_1.mp4", isVertical: true },
             { id: "ai-adv-12", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787501928/CLEANTRA_HOOK_1_BODY.mp4", isVertical: true },
           ]
         },
@@ -224,27 +220,24 @@ const AllWork = () => {
           name: "AI FILM MAKING/MICRODRAMAS",
           items: [
             { id: "ai-land-1", title: "Nature Synthesis", tag: "Visual Art", type: "youtube", videoId: "d3HpHGpXFuE" },
-            { id: "ai-land-2", title: "Atmospheric Environment", tag: "Landscape", type: "youtube", videoId: "xC_v-LddSJI" },
-            { id: "ai-land-3", title: "Ethereal Worlds", tag: "Landscape", type: "youtube", videoId: "QGRvL-vvtBI" },
-            { id: "ai-land-4", title: "Island", tag: "Landscape", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787478552/Island_1.mp4" },
-            { id: "ai-land-5", title: "Chase1", tag: "Landscape", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787479307/CHASE_PART_1_1.mp4" },
-            { id: "ai-land-6", title: "Chase2", tag: "Landscape", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787479281/Chase_part_22_1_1.mp4" },
-            { id: "ai-land-7", title: "Chase2", tag: "Landscape", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787502776/dragon_2_1.mp4" },
+            // { id: "ai-land-2", title: "Atmospheric Environment", tag: "Landscape", type: "youtube", videoId: "xC_v-LddSJI" },
+            // { id: "ai-land-3", title: "Ethereal Worlds", tag: "Landscape", type: "youtube", videoId: "QGRvL-vvtBI" },
+            // { id: "ai-land-4", title: "Island", tag: "Landscape", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787478552/Island_1.mp4" },
+            // { id: "ai-land-5", title: "Chase1", tag: "Landscape", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787479307/CHASE_PART_1_1.mp4" },
+            // { id: "ai-land-6", title: "Chase2", tag: "Landscape", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787479281/Chase_part_22_1_1.mp4" },
+            // { id: "ai-land-7", title: "Chase2", tag: "Landscape", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787502776/dragon_2_1.mp4" },
+            { id: "ai-story-1", title: "AI Visual Journey", tag: "Story", type: "youtube", videoId: "DuD_8TXKV_E", isSquare: true },
+            { id: "ai-story-2", title: "Cyberpunk Narrative", tag: "Story", type: "youtube", videoId: "WJS5_laqbno", isSquare: true }
           ]
         },
         {
           name: "Cartoon Advertisements",
           items: [
-            { id: "ai-cart-1", title: "Animated Cartoon Feature", tag: "Animation", type: "youtube", videoId: "B3Yjbh1rXqg", isVertical: true }
+            { id: "ai-cart-1", title: "Animated Cartoon Feature", tag: "Animation", type: "youtube", videoId: "B3Yjbh1rXqg", isVertical: true },
+            { id: "ai-cart-2", title: "Chase2", tag: "Cartoon", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789549177/HOOK_1.mp4", isVertical: true },
           ]
         },
-        {
-          name: "AI Storytelling",
-          items: [
-            { id: "ai-story-1", title: "AI Visual Journey", tag: "Story", type: "youtube", videoId: "DuD_8TXKV_E", isSquare: true },
-            { id: "ai-story-2", title: "Cyberpunk Narrative", tag: "Story", type: "youtube", videoId: "WJS5_laqbno", isSquare: true }
-          ]
-        }
+        
       ]
     },
     {
@@ -257,38 +250,33 @@ const AllWork = () => {
           name: "Talking head Videos",
           items: [
             { id: "adv-v-1", title: "High-Impact Social Ad", tag: "Advertising", type: "youtube", videoId: "-MhFhPmehbg", isVertical: true },
-            { id: "adv-v-2", title: "Performance Marketing", tag: "Performance", type: "youtube", videoId: "ICPDfLbCpSo" },
+            // { id: "adv-v-2", title: "Performance Marketing", tag: "Performance", type: "youtube", videoId: "ICPDfLbCpSo" },
             { id: "adv-v-3", title: "Brand Story Concept", tag: "Social", type: "youtube", videoId: "2lg3x2LiC6E", isVertical: true },
             { id: "adv-v-4", title: "AI Storytelling 03", tag: "Story", type: "youtube", videoId: "rQwvy-Tbx1A", isSquare: true },
             { id: "adv-v-5", title: "Performance Marketing", tag: "Performance", type: "youtube", videoId: "mIf5Fmr8t2E" },
             { id: "adv-v-7", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504561/coasty_ai_1_1.mp4"},
             { id: "adv-v-8", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504413/coaching.mp4"},
             { id: "adv-v-9", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504409/RAM.mp4"},
-            { id: "adv-v-10", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504408/high_paying_skill_final.mp4"},
-            { id: "adv-v-11", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504407/Dragon_Fruit_Extended_6-2.mp4"},
+            // { id: "adv-v-10", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504408/high_paying_skill_final.mp4"},
+            // { id: "adv-v-11", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504407/Dragon_Fruit_Extended_6-2.mp4"},
             { id: "adv-v-12", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504407/watch.mp4"},
             { id: "adv-v-6", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504559/modulate_V2_V2_1.mp4", isVertical: true},
           ]
         },
         {
-          name: "Launch Videos",
+          name: "Launch/SAAS Videos",
           items: [
             { id: "launch-1", title: "LAUNCH 1", tag: "LAUNCH", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787476160/Launch_Video-1_1.mp4" },
-            { id: "launch-2", title: "LAUNCH 1", tag: "LAUNCH", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787501421/VANCO_1.mp4" }
+            // { id: "launch-2", title: "LAUNCH 1", tag: "LAUNCH", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787501421/VANCO_1.mp4" },
+            { id: "saas-1", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "pzTZtvfVRRA" },
+            // { id: "saas-2", title: "SAAS 2", tag: "SAAS", type: "youtube", videoId: "JM_Oc76sc5s" },
+            { id: "saas-3", title: "SAAS 3", tag: "SAAS", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787474710/SAAS-1.mp4" },
+            { id: "saas-4", title: "SAAS 4", tag: "SAAS", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789549853/linzumi_with_sfx.mp4" },
+            { id: "saas-5", title: "SAAS 5", tag: "SAAS", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789549859/rev_bubble_lab_draft_2.mp4" },
+            { id: "saas-6", title: "SAAS 6", tag: "SAAS", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789549862/marble_draft_2.mp4" },
+            // { id: "saas-7", title: "SAAS 7", tag: "SAAS", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787502237/nikeeeeeeeee.mp4", isSquare: true },
           ]
         },
-        {
-          name: "SAAS Style",
-          items: [
-            { id: "saas-1", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "pzTZtvfVRRA" },
-            { id: "saas-2", title: "SAAS 2", tag: "SAAS", type: "youtube", videoId: "JM_Oc76sc5s" },
-            { id: "saas-3", title: "SAAS 3", tag: "SAAS", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787474710/SAAS-1.mp4" },
-            { id: "saas-4", title: "SAAS 4", tag: "SAAS", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787475543/SAAS-6.mp4" },
-            { id: "saas-5", title: "SAAS 5", tag: "SAAS", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787475548/SAAS-4.mp4" },
-            { id: "saas-6", title: "SAAS 6", tag: "SAAS", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787475553/SAAS-5.mp4" },
-            { id: "saas-7", title: "SAAS 7", tag: "SAAS", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787502237/nikeeeeeeeee.mp4", isSquare: true },
-          ]
-        }
       ]
     },
     {
