@@ -12,11 +12,12 @@ interface FeaturedVideo {
 }
 
 const featuredVideos: FeaturedVideo[] = [
-  { id: "feat-2", title: "Animated Cartoon Feature", category: "Cartoon", videoId: "B3Yjbh1rXqg" },
-  { id: "feat-3", title: "Performance Marketing", category: "Edits", videoId: "ICPDfLbCpSo" },
-  { id: "feat-4", title: "AI Storytelling", category: "AI Story", videoId: "rQwvy-Tbx1A" },
-  { id: "feat-5", title: "Nature Synthesis", category: "Landscape", videoId: "d3HpHGpXFuE" },
-  { id: "feat-6", title: "Visual Storytelling", category: "Ads", videoId: "_-egdW6Ca5Y" },
+  { id: "feat-1", title: "Nature Synthesis", category: "Landscape", videoId: "SFtXVIzt7QI" },
+  { id: "feat-2", title: "Nature Synthesis", category: "Landscape", videoId: "81kVaenG2uM" },
+  { id: "feat-3", title: "Animated Cartoon Feature", category: "Cartoon", videoId: "B3Yjbh1rXqg" },
+  { id: "feat-4", title: "Performance Marketing", category: "Edits", videoId: "XSLiZ0sfFm0" },
+  { id: "feat-5", title: "AI Storytelling", category: "AI Story", videoId: "CJLH_LOea24" },
+  { id: "feat-6", title: "Nature Synthesis", category: "Landscape", videoId: "-HR2t46Vx_s" },
 ];
 
 export const MacbookShowcase = () => {

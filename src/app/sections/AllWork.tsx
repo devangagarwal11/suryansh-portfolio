@@ -239,26 +239,20 @@ const AllWork = () => {
       cardType: "card-coral",
       subcategories: [
         {
-          name: "Talking head Videos",
+          name: "Launch/SAAS Videos",
           items: [
-            { id: "adv-v-1", title: "High-Impact Social Ad", tag: "Advertising", type: "youtube", videoId: "-MhFhPmehbg", isVertical: true },
-            { id: "adv-v-4", title: "AI Storytelling 03", tag: "Story", type: "youtube", videoId: "rQwvy-Tbx1A", isSquare: true },
-            // { id: "adv-v-7", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504561/coasty_ai_1_1.mp4"},
-            // { id: "adv-v-8", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504413/coaching.mp4"},
-            // { id: "adv-v-9", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504409/RAM.mp4"},
-            // { id: "adv-v-12", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504407/watch.mp4"},
-            // { id: "adv-v-6", title: "Performance Marketing", tag: "Performance", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787504559/modulate_V2_V2_1.mp4", isVertical: true},
+            { id: "saas-1", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "pzTZtvfVRRA" },
+            { id: "saas-2", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "XSLiZ0sfFm0" },
+            { id: "saas-3", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "CJLH_LOea24" },
+            { id: "saas-4", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "-HR2t46Vx_s" },
           ]
         },
         {
-          name: "Launch/SAAS Videos",
+          name: "Talking head Videos",
           items: [
-            // { id: "launch-2", title: "LAUNCH 1", tag: "LAUNCH", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787501421/VANCO_1.mp4" },
-            { id: "saas-1", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "pzTZtvfVRRA" },
-            // { id: "saas-2", title: "SAAS 2", tag: "SAAS", type: "youtube", videoId: "JM_Oc76sc5s" ,isSquare: true},
-            { id: "saas-1", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "XSLiZ0sfFm0" },
-            { id: "saas-1", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "CJLH_LOea24" },
-            { id: "saas-1", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "-HR2t46Vx_s" },
+            { id: "adv-v-4", title: "AI Storytelling 03", tag: "Story", type: "youtube", videoId: "rQwvy-Tbx1A", isVertical: true },
+            { id: "adv-v-1", title: "High-Impact Social Ad", tag: "Advertising", type: "youtube", videoId: "-MhFhPmehbg", isVertical: true },
+            
           ]
         },
       ]
@@ -397,7 +391,7 @@ const AllWork = () => {
             {category.name !== "Post Designs" && (
               <div className="flex flex-col gap-4 mb-12">
                 <div className="flex items-center gap-4">
-                  <span className="text-xs font-bold text-white/20 tracking-widest uppercase">0{category.index}</span>
+                  <span className="text-xs fo  nt-bold text-white/20 tracking-widest uppercase">0{category.index}</span>
                   <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent" />
                 </div>
                 <div className="flex items-baseline gap-4">
@@ -483,11 +477,14 @@ const AllWork = () => {
                       {landscapeItems.length > 0 && (
                         <div className="flex flex-wrap justify-center gap-6">
                           {landscapeItems.map((item: any, idx) => {
-                            const widthClass = landscapeItems.length === 4
-                              ? "w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)]"
-                              : "w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]";
+                            const isSaasVideos = sub.name === "Launch/SAAS Videos";
+                            const widthClass = isSaasVideos
+                              ? "w-full sm:w-[calc(50%-12px)]"
+                              : landscapeItems.length === 4
+                                ? "w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)]"
+                                : "w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]";
                             return (
-                              <div key={item.id} className={cn(widthClass, "max-w-[420px] transform-gpu will-change-transform")}>
+                              <div key={item.id} className={cn(widthClass, isSaasVideos ? "max-w-[560px]" : "max-w-[420px]", "transform-gpu will-change-transform")}>
                                 <motion.div 
                                   className="aspect-video rounded-[1.8rem] overflow-hidden relative group cursor-pointer p-0 border border-white/5 bg-[#111]"
                                 >
