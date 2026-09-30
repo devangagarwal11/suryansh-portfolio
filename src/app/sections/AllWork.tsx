@@ -217,6 +217,7 @@ const AllWork = () => {
             { id: "ai-adv-8", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "zVAtcFGlZAQ", isVertical: true },
             { id: "ai-adv-9", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "C9CtqgNNbjw", isVertical: true },
             { id: "ai-cart-1", title: "Animated Cartoon Feature", tag: "Animation", type: "youtube", videoId: "B3Yjbh1rXqg", isVertical: true },
+            { id: "ai-adv-10", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "-BdDyhrFpxo", isVertical: true },
           ]
         },
         {
