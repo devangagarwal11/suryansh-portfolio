@@ -254,6 +254,7 @@ const AllWork = () => {
           items: [
             { id: "adv-v-4", title: "AI Storytelling 03", tag: "Story", type: "youtube", videoId: "rQwvy-Tbx1A", isVertical: true },
             { id: "adv-v-1", title: "High-Impact Social Ad", tag: "Advertising", type: "youtube", videoId: "-MhFhPmehbg", isVertical: true },
+            { id: "adv-v-5", title: "Talking Head 03", tag: "Talking Head", type: "youtube", videoId: "teBFGvYspcc", isVertical: true },
             
           ]
         },
