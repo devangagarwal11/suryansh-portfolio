@@ -207,10 +207,10 @@ export const About = () => {
               {/* Bio */}
               <div className="flex flex-col gap-8">
                 <h3 className="text-3xl md:text-5xl font-serif text-white tracking-tight flex flex-wrap items-center gap-x-2 md:gap-x-3 gap-y-1 md:gap-y-2">
-                  <RandomLetterSwapPingPong label="Crafting" />
-                  <span>the</span>
-                  <span className="text-white/40 italic">Future</span>
-                  <span>of Visual Storytelling</span>
+                  <RandomLetterSwapPingPong label="Scroll-Stopping" />
+                  <span>Creative.</span>
+                  <span>Lower CAC.</span>
+                  <span className="text-white/40 italic">Higher ROAS.</span>
                 </h3>
                 <div className="flex flex-col gap-6">
                   <TextEffect preset="blur" className="text-xl md:text-2xl text-white/80 leading-relaxed font-serif">
