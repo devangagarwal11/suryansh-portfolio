@@ -4,11 +4,15 @@ import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 const INTERACTIVE = "a, button, [role='button'], input, textarea, select, label, summary, .cursor-pointer";
+// Areas marked data-cursor="dollar" (every video) show a bold $ cursor.
+// Real buttons inside them (mute, play, skip) keep the normal hover ring.
+const DOLLAR_ZONE = "[data-cursor='dollar']";
 
 export const CustomCursor = () => {
   const [enabled, setEnabled] = useState(false); // real mouse/trackpad only
   const [visible, setVisible] = useState(false); // hidden until the first mouse move
   const [isHovered, setIsHovered] = useState(false);
+  const [isDollar, setIsDollar] = useState(false);
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
@@ -49,7 +53,9 @@ export const CustomCursor = () => {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as Element | null;
-      setIsHovered(!!target?.closest?.(INTERACTIVE));
+      const dollar = !!target?.closest?.(DOLLAR_ZONE) && !target?.closest?.("button, input");
+      setIsDollar(dollar);
+      setIsHovered(!dollar && !!target?.closest?.(INTERACTIVE));
     };
 
     const hide = () => setVisible(false);
@@ -77,8 +83,8 @@ export const CustomCursor = () => {
         className="fixed top-0 left-0 w-[10px] h-[10px] bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference"
         style={{ x: innerX, y: innerY, translateX: "-50%", translateY: "-50%" }}
         animate={{
-          opacity: visible && !isHovered ? 1 : 0,
-          scale: isHovered ? 0 : 1,
+          opacity: visible && !isHovered && !isDollar ? 1 : 0,
+          scale: isHovered || isDollar ? 0 : 1,
         }}
         transition={{ duration: 0.15 }}
       />
@@ -91,10 +97,26 @@ export const CustomCursor = () => {
         animate={{
           width: isHovered ? 60 : 36,
           height: isHovered ? 60 : 36,
-          opacity: visible ? 1 : 0,
+          opacity: visible && !isDollar ? 1 : 0,
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
       />
+
+      {/* Dollar cursor (videos) */}
+      <motion.div
+        className="fixed top-0 left-0 pointer-events-none z-[10000] flex items-center justify-center w-16 h-16 rounded-full bg-white text-black shadow-[0_0_0_4px_rgba(0,0,0,0.35),0_0_28px_rgba(255,255,255,0.45)]"
+        style={{ x: innerX, y: innerY, translateX: "-50%", translateY: "-50%" }}
+        initial={{ opacity: 0, scale: 0.3, rotate: -20 }}
+        animate={{
+          opacity: visible && isDollar ? 1 : 0,
+          scale: visible && isDollar ? 1 : 0.3,
+          rotate: isDollar ? 0 : -20,
+        }}
+        transition={{ type: "spring", damping: 16, stiffness: 320 }}
+        aria-hidden="true"
+      >
+        <span className="text-[38px] leading-none font-black font-sans -mt-0.5 select-none">$</span>
+      </motion.div>
     </>
   );
 };

@@ -204,7 +204,8 @@ export const MacbookShowcase = () => {
                 ref={screenRef}
                 onPointerEnter={(e) => isMousePointer(e) && startPlayback()}
                 onPointerLeave={(e) => isMousePointer(e) && !isFullscreen && pause()}
-                className="absolute bg-black overflow-hidden z-10 group/screen native-cursor"
+                data-cursor="dollar"
+                className="absolute bg-black overflow-hidden z-10 group/screen"
                 style={{
                   top: "11.2%",     // pushed slightly down to clear top bezel
                   left: "14%",      // pushed inward to clear left bezel
