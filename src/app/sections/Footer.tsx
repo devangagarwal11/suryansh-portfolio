@@ -83,31 +83,7 @@ export function Footer() {
             © {new Date().getFullYear()} Suryansh Srivastava. All rights reserved.
           </p>
 
-          {/* Right aligned group */}
-          <div className="flex items-center gap-6 flex-col md:flex-row w-full md:w-auto justify-between md:justify-end">
-            {/* Developer Reference with beating heart & sleek hover glow */}
-            <div className="text-sm text-white/40 flex items-center gap-1.5 py-1">
-              <span>Made with</span>
-              <motion.span 
-                animate={{ scale: [1, 1.25, 1] }}
-                transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-                className="inline-block text-red-500 filter drop-shadow-[0_0_4px_rgba(239,68,68,0.5)]"
-              >
-                ❤️
-              </motion.span>
-              <span>by</span>
-              <a 
-                href="https://www.instagram.com/pandey.aditya._/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="font-medium text-emerald-400 hover:text-emerald-300 transition-colors relative group py-0.5"
-              >
-                Aditya Pandey
-                {/* Aesthetic expanding underline */}
-                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-emerald-400 origin-bottom-right transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100 group-hover:origin-bottom-left" />
-              </a>
-            </div>
-
+          <div className="flex items-center justify-center md:justify-end">
             <motion.button onClick={scrollToTop}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/40 transition-colors hover:text-white hover:border-white/20"
               whileHover={{ y: -3, scale: 1.1 }} whileTap={{ scale: 0.9 }} aria-label="Scroll to top">
