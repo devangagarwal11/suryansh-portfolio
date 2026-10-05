@@ -4,15 +4,17 @@ import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 const INTERACTIVE = "a, button, [role='button'], input, textarea, select, label, summary, .cursor-pointer";
-// Areas marked data-cursor="dollar" (every video) show a bold $ cursor.
+// Areas marked data-cursor="video" (every video) show the headset-cat cursor,
+// which blinks when it lands on a video and every few seconds while there.
 // Real buttons inside them (mute, play, skip) keep the normal hover ring.
-const DOLLAR_ZONE = "[data-cursor='dollar']";
+const VIDEO_ZONE = "[data-cursor='video']";
 
 export const CustomCursor = () => {
   const [enabled, setEnabled] = useState(false); // real mouse/trackpad only
   const [visible, setVisible] = useState(false); // hidden until the first mouse move
   const [isHovered, setIsHovered] = useState(false);
-  const [isDollar, setIsDollar] = useState(false);
+  const [isVideo, setIsVideo] = useState(false);
+  const [blink, setBlink] = useState(false);
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
@@ -53,9 +55,9 @@ export const CustomCursor = () => {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as Element | null;
-      const dollar = !!target?.closest?.(DOLLAR_ZONE) && !target?.closest?.("button, input");
-      setIsDollar(dollar);
-      setIsHovered(!dollar && !!target?.closest?.(INTERACTIVE));
+      const overVideo = !!target?.closest?.(VIDEO_ZONE) && !target?.closest?.("button, input");
+      setIsVideo(overVideo);
+      setIsHovered(!overVideo && !!target?.closest?.(INTERACTIVE));
     };
 
     const hide = () => setVisible(false);
@@ -74,6 +76,23 @@ export const CustomCursor = () => {
     };
   }, [enabled, mouseX, mouseY, innerX, innerY, outerX, outerY]);
 
+  // Blink shortly after landing on a video, then every ~3s while hovering.
+  useEffect(() => {
+    if (!isVideo) return;
+    const timers: number[] = [];
+    const doBlink = () => {
+      setBlink(true);
+      timers.push(window.setTimeout(() => setBlink(false), 140));
+    };
+    timers.push(window.setTimeout(doBlink, 220));
+    const loop = window.setInterval(doBlink, 3000);
+    return () => {
+      window.clearInterval(loop);
+      timers.forEach((t) => window.clearTimeout(t));
+      setBlink(false);
+    };
+  }, [isVideo]);
+
   if (!enabled) return null;
 
   return (
@@ -83,8 +102,8 @@ export const CustomCursor = () => {
         className="fixed top-0 left-0 w-[10px] h-[10px] bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference"
         style={{ x: innerX, y: innerY, translateX: "-50%", translateY: "-50%" }}
         animate={{
-          opacity: visible && !isHovered && !isDollar ? 1 : 0,
-          scale: isHovered || isDollar ? 0 : 1,
+          opacity: visible && !isHovered && !isVideo ? 1 : 0,
+          scale: isHovered || isVideo ? 0 : 1,
         }}
         transition={{ duration: 0.15 }}
       />
@@ -97,25 +116,34 @@ export const CustomCursor = () => {
         animate={{
           width: isHovered ? 60 : 36,
           height: isHovered ? 60 : 36,
-          opacity: visible && !isDollar ? 1 : 0,
+          opacity: visible && !isVideo ? 1 : 0,
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
       />
 
-      {/* Dollar cursor (videos) */}
+      {/* Cat cursor (videos) */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[10000] flex items-center justify-center w-16 h-16 rounded-full bg-white text-black shadow-[0_0_0_4px_rgba(0,0,0,0.35),0_0_28px_rgba(255,255,255,0.45)]"
+        className="fixed top-0 left-0 pointer-events-none z-[10000] w-[70px] h-[96px] drop-shadow-[0_6px_14px_rgba(0,0,0,0.6)]"
         style={{ x: innerX, y: innerY, translateX: "-50%", translateY: "-50%" }}
-        initial={{ opacity: 0, scale: 0.3, rotate: -20 }}
+        initial={{ opacity: 0, scale: 0.4, rotate: -12 }}
         animate={{
-          opacity: visible && isDollar ? 1 : 0,
-          scale: visible && isDollar ? 1 : 0.3,
-          rotate: isDollar ? 0 : -20,
+          opacity: visible && isVideo ? 1 : 0,
+          scale: visible && isVideo ? 1 : 0.4,
+          rotate: isVideo ? 0 : -12,
         }}
-        transition={{ type: "spring", damping: 16, stiffness: 320 }}
+        transition={{ type: "spring", damping: 15, stiffness: 300 }}
         aria-hidden="true"
       >
-        <span className="text-[38px] leading-none font-black font-sans -mt-0.5 select-none">$</span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/cat-cursor.png" alt="" draggable={false} className="absolute inset-0 w-full h-full select-none" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/cat-cursor-blink.png"
+          alt=""
+          draggable={false}
+          className="absolute inset-0 w-full h-full select-none"
+          style={{ opacity: blink ? 1 : 0 }}
+        />
       </motion.div>
     </>
   );
