@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, ChevronLeft, ChevronRight, Play, Pause, SkipBack, SkipForward, Maximize2, Minimize2 } from "lucide-react";
+import { useYouTubePlayer, isMousePointer, ytThumb, onThumbLoad } from "@/lib/youtube";
 
 interface FeaturedVideo {
   id: string;
@@ -23,32 +24,47 @@ const featuredVideos: FeaturedVideo[] = [
 export const MacbookShowcase = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(true);
+  // Nothing plays on its own: the player is only created on first hover/tap,
+  // plays while the cursor is over the screen, and pauses when it leaves.
+  const [mounted, setMounted] = useState(false);
   const [direction, setDirection] = useState(0); // -1 left, 1 right
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
+  const {
+    play,
+    pause,
+    setMuted: ytSetMuted,
+    seekTo: ytSeekTo,
+    send,
+    onIframeLoad,
+    isPlaying,
+    reset,
+  } = useYouTubePlayer(iframeRef);
 
   const activeVideo = featuredVideos[activeIndex];
 
-  const postMessage = useCallback((func: string) => {
-    if (!iframeRef.current) return;
-    iframeRef.current.contentWindow?.postMessage(
-      JSON.stringify({ event: "command", func }),
-      "*"
-    );
-  }, []);
-
   useEffect(() => {
-    postMessage(isMuted ? "mute" : "unMute");
-    postMessage(isPlaying ? "playVideo" : "pauseVideo");
-  }, [isMuted, isPlaying, postMessage]);
+    ytSetMuted(isMuted);
+  }, [isMuted, ytSetMuted]);
+
+  // Pause when the showcase scrolls out of view.
+  useEffect(() => {
+    const el = screenRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) pause();
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [pause]);
 
   useEffect(() => {
     setCurrentTime(0);
     setDuration(0);
+    reset();
 
     const handlePlayerMessage = (event: MessageEvent) => {
       if (event.source !== iframeRef.current?.contentWindow || typeof event.data !== "string") return;
@@ -69,24 +85,33 @@ export const MacbookShowcase = () => {
     };
 
     window.addEventListener("message", handlePlayerMessage);
-    const updateProgress = window.setInterval(() => {
-      postMessage("getCurrentTime");
-      postMessage("getDuration");
-    }, 500);
+    return () => window.removeEventListener("message", handlePlayerMessage);
+  }, [activeVideo.videoId, reset]);
 
-    return () => {
-      window.removeEventListener("message", handlePlayerMessage);
-      window.clearInterval(updateProgress);
-    };
-  }, [activeVideo.videoId, postMessage]);
+  // Only poll the timeline while something is actually playing.
+  useEffect(() => {
+    if (!isPlaying) return;
+    const updateProgress = window.setInterval(() => {
+      send("getCurrentTime");
+      send("getDuration");
+    }, 500);
+    return () => window.clearInterval(updateProgress);
+  }, [isPlaying, send]);
+
+  const startPlayback = () => {
+    setMounted(true);
+    play();
+  };
+
+  const togglePlay = () => {
+    if (isPlaying) pause();
+    else startPlayback();
+  };
 
   const seekTo = (time: number) => {
     const nextTime = Math.max(0, Math.min(time, duration || time));
     setCurrentTime(nextTime);
-    iframeRef.current?.contentWindow?.postMessage(
-      JSON.stringify({ event: "command", func: "seekTo", args: [nextTime, true] }),
-      "*"
-    );
+    ytSeekTo(nextTime);
   };
 
   const formatTime = (time: number) => {
@@ -117,25 +142,15 @@ export const MacbookShowcase = () => {
   const goTo = (newIndex: number) => {
     const total = featuredVideos.length;
     const nextIdx = (newIndex + total) % total;
+    if (nextIdx === activeIndex) return;
     setDirection(newIndex > activeIndex ? 1 : -1);
     setIsMuted(true);
-    setIsPlaying(true);
+    pause();
     setActiveIndex(nextIdx);
   };
 
-  const goPrev = () => {
-    setDirection(-1);
-    setIsMuted(true);
-    setIsPlaying(true);
-    setActiveIndex((prev) => (prev - 1 + featuredVideos.length) % featuredVideos.length);
-  };
-
-  const goNext = () => {
-    setDirection(1);
-    setIsMuted(true);
-    setIsPlaying(true);
-    setActiveIndex((prev) => (prev + 1) % featuredVideos.length);
-  };
+  const goPrev = () => goTo(activeIndex - 1);
+  const goNext = () => goTo(activeIndex + 1);
 
   return (
     <div className="w-full flex flex-col items-center mb-24 relative">
@@ -187,6 +202,8 @@ export const MacbookShowcase = () => {
               {/* Adjust these percentage values based on the actual screen position in the image */}
               <div 
                 ref={screenRef}
+                onPointerEnter={(e) => isMousePointer(e) && startPlayback()}
+                onPointerLeave={(e) => isMousePointer(e) && !isFullscreen && pause()}
                 className="absolute bg-black overflow-hidden z-10 group/screen native-cursor"
                 style={{
                   top: "11.2%",     // pushed slightly down to clear top bezel
@@ -209,19 +226,25 @@ export const MacbookShowcase = () => {
                     transition={{ duration: 0.35, ease: "easeInOut" }}
                     className="absolute inset-0 w-full h-full"
                   >
-                    <iframe
-                      ref={iframeRef}
-                      src={`https://www.youtube.com/embed/${activeVideo.videoId}?autoplay=1&mute=1&loop=1&playlist=${activeVideo.videoId}&controls=0&modestbranding=1&rel=0&disablekb=1&iv_load_policy=3&enablejsapi=1&playsinline=1&showinfo=0`}
-                      className="absolute inset-0 w-[104%] h-[120%] -top-[10%] -left-[2%] border-none pointer-events-none"
-                      allow="autoplay; encrypted-media"
-                      title={activeVideo.title}
-                      onLoad={() => {
-                        iframeRef.current?.contentWindow?.postMessage(
-                          JSON.stringify({ event: "listening", id: 1, channel: "macbook-showcase" }),
-                          "*"
-                        );
-                        postMessage("getDuration");
-                      }}
+                    {mounted && (
+                      <iframe
+                        ref={iframeRef}
+                        src={`https://www.youtube.com/embed/${activeVideo.videoId}?autoplay=0&mute=1&loop=1&playlist=${activeVideo.videoId}&controls=0&modestbranding=1&rel=0&disablekb=1&iv_load_policy=3&enablejsapi=1&playsinline=1`}
+                        className="absolute inset-0 w-[104%] h-[120%] -top-[10%] -left-[2%] border-none pointer-events-none"
+                        allow="autoplay; encrypted-media; fullscreen"
+                        title={activeVideo.title}
+                        tabIndex={-1}
+                        onLoad={onIframeLoad}
+                      />
+                    )}
+                    {/* Cover image until the video is actually playing */}
+                    <img
+                      src={ytThumb(activeVideo.videoId)}
+                      onLoad={(e) => onThumbLoad(e, activeVideo.videoId)}
+                      alt={activeVideo.title}
+                      className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-500 ${
+                        isPlaying ? "opacity-0" : "opacity-100"
+                      }`}
                     />
                   </motion.div>
                 </AnimatePresence>
@@ -230,7 +253,7 @@ export const MacbookShowcase = () => {
                 <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10 pointer-events-none" />
 
                 {/* Central Play/Pause/Skip Overlay */}
-                <div className="absolute inset-0 z-20 flex items-center justify-center gap-4 md:gap-6 pointer-events-none opacity-0 group-hover/screen:opacity-100 transition-opacity duration-300">
+                <div className={`absolute inset-0 z-20 flex items-center justify-center gap-4 md:gap-6 pointer-events-none transition-opacity duration-300 ${isPlaying ? "opacity-0 group-hover/screen:opacity-100" : "opacity-100"}`}>
                   {/* Prev */}
                   <button 
                     onClick={(e) => { e.stopPropagation(); seekTo(currentTime - 10); }} 
@@ -242,7 +265,7 @@ export const MacbookShowcase = () => {
                   </button>
                   {/* Play/Pause */}
                   <button 
-                    onClick={(e) => { e.stopPropagation(); setIsPlaying(!isPlaying); }} 
+                    onClick={(e) => { e.stopPropagation(); togglePlay(); }} 
                     title={isPlaying ? "Pause video" : "Play video"}
                     aria-label={isPlaying ? "Pause video" : "Play video"}
                     className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-black/60 text-white flex items-center justify-center backdrop-blur-md pointer-events-auto hover:bg-black/80 hover:scale-110 transition-all shadow-xl"
