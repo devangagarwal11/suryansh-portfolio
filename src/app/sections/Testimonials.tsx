@@ -54,7 +54,7 @@ export const Testimonials = () => {
             <div className="grid grid-cols-3 gap-2 md:gap-3">
               {[
                 { value: "100+", label: "Happy clients" },
-                { value: "$110k+", label: "Revenue Added" },
+                { value: "$1M+", label: "Revenue Added" },
                 { value: "4.3", label: "Average Rating" },
               ].map((stat, i) => (
                 <div 

@@ -55,7 +55,7 @@ export const ResumeSection = () => {
                 <LiquidButton 
                   size="lg" 
                   className="group"
-                  onClick={() => window.open('https://drive.google.com/file/d/1IYfQWwlcPpVyF7RsDMAoaru5O1S28JhQ/view?usp=sharing', '_blank')}
+                  onClick={() => window.open('/Suryansh-Srivastava-Resume.pdf', '_blank')}
                 >
                   <Download className="w-5 h-5 mr-2 group-hover:animate-bounce" />
                   Download Resume
