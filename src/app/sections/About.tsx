@@ -24,7 +24,9 @@ export const About = () => {
     {
       title: "AI Tools",
       skills: [
-        { name: "Veo 3 & Nano Banana", desc: "Google DeepMind's broadcast-grade cinematic AI models" },
+        { name: "Suno AI", desc: "AI music generation for custom soundtracks and jingles" },
+        { name: "HeyGen", desc: "AI avatars and talking-head video generation" },
+        { name: "Claude", desc: "AI scripting, hooks and creative direction" },
         { name: "Higgsfield AI", desc: "High-fidelity AI video generation for brand storytelling" },
         { name: "Descript & Runway ML", desc: "AI-powered editing and text-to-video synthesis" },
         { name: "ChatGPT & Sora & ElevenLabs", desc: "AI writing, video generation, and voice synthesis" },
