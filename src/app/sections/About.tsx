@@ -24,7 +24,9 @@ export const About = () => {
     {
       title: "AI Tools",
       skills: [
-        { name: "Veo 3 & Nano Banana", desc: "Google DeepMind's broadcast-grade cinematic AI models" },
+        { name: "Suno AI", desc: "AI music generation for custom soundtracks and jingles" },
+        { name: "HeyGen", desc: "AI avatars and talking-head video generation" },
+        { name: "Claude", desc: "AI scripting, hooks and creative direction" },
         { name: "Higgsfield AI", desc: "High-fidelity AI video generation for brand storytelling" },
         { name: "Descript & Runway ML", desc: "AI-powered editing and text-to-video synthesis" },
         { name: "ChatGPT & Sora & ElevenLabs", desc: "AI writing, video generation, and voice synthesis" },
@@ -90,8 +92,16 @@ export const About = () => {
   ];
 
   return (
-    <section id="about" className="pt-32 pb-24 bg-[#0c0c0c]">
-      <div className="max-w-[1300px] mx-auto px-6">
+    <section id="about" className="relative pt-32 pb-24">
+      {/* Transparent on purpose: the site-wide animated background (stars,
+          streaks, smoke) continues from the hero through this section. The
+          gradient at the bottom fades it into the solid All Work section
+          so there is no hard edge. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-[#080808]"
+      />
+      <div className="relative max-w-[1300px] mx-auto px-6">
         {/* Section Header */}
         <SectionReveal variant="fade-up" className="flex justify-center mb-10">
           <p className="text-white/40 text-center max-w-md text-base font-medium">
@@ -197,14 +207,14 @@ export const About = () => {
               {/* Bio */}
               <div className="flex flex-col gap-8">
                 <h3 className="text-3xl md:text-5xl font-serif text-white tracking-tight flex flex-wrap items-center gap-x-2 md:gap-x-3 gap-y-1 md:gap-y-2">
-                  <RandomLetterSwapPingPong label="Crafting" />
-                  <span>the</span>
-                  <span className="text-white/40 italic">Future</span>
-                  <span>of Visual Storytelling</span>
+                  <RandomLetterSwapPingPong label="Scroll-Stopping" />
+                  <span>Creative.</span>
+                  <span>Lower CAC.</span>
+                  <span className="text-white/40 italic">Higher ROAS.</span>
                 </h3>
                 <div className="flex flex-col gap-6">
                   <TextEffect preset="blur" className="text-xl md:text-2xl text-white/80 leading-relaxed font-serif">
-                    I am a versatile AI Visual Creator and Motion Artist specializing in high-end AI video synthesis, cinematic motion graphics, and premium brand storytelling. 
+                    I direct AI video and motion design for YC startups and 8 and 9 figure DTC brands. 
                   </TextEffect>
                 </div>
 

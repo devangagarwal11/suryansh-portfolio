@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowUpRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
+import { X, Play, Volume2, VolumeX } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { RandomLetterSwapPingPong } from '@/components/ui/random-letter-swap';
@@ -10,7 +10,8 @@ import { Flipbook } from '@/components/ui/Flipbook';
 import { SectionReveal } from '@/components/ui/SectionReveal';
 import { MacbookShowcase } from '@/components/ui/MacbookShowcase';
 import { TextScramble } from '@/components/ui/text-scramble';
-import { startSmoothScroll, stopSmoothScroll } from '@/lib/scroll';
+import { startSmoothScroll, stopSmoothScroll, scrollToTarget } from '@/lib/scroll';
+import { useYouTubePlayer, isMousePointer, ytThumb, onThumbLoad } from '@/lib/youtube';
 interface WorkItem {
   id: string;
   title: string;
@@ -22,185 +23,177 @@ interface WorkItem {
   isSquare?: boolean;
 }
 
+const PAUSE_PREVIEWS_EVENT = 'allwork:pause-previews';
+
+// Gallery card media. Nothing plays on its own:
+//  - mouse: the video plays (muted) only while the cursor is over the card
+//  - touch: tapping the card opens the full player (handled by the parent)
+// The YouTube player is only created the first time a card is hovered, so the
+// page no longer loads 20+ players while scrolling.
 const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any, isUnmuted: boolean, setUnmutedId: (id: string | null) => void }) => {
-  const [hasBeenSeen, setHasBeenSeen] = React.useState(false);
-  const [isPlaying, setIsPlaying] = React.useState(true);
+  const isYouTube = item.type === 'youtube';
+  const isVideoFile = item.type === 'video' || (item.type === 'cloudinary' && item.src?.endsWith('.mp4'));
+  const isPlayable = isYouTube || isVideoFile;
+
   const containerRef = React.useRef<HTMLDivElement>(null);
   const iframeRef = React.useRef<HTMLIFrameElement>(null);
   const videoRef = React.useRef<HTMLVideoElement>(null);
+  const hoveringRef = React.useRef(false);
 
-  const [isVisible, setIsVisible] = React.useState(false);
-  const [playerReady, setPlayerReady] = React.useState(0);
+  const [hovering, setHovering] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false); // player created on first hover
+  const [fileReady, setFileReady] = React.useState(false);
+  const { play: ytPlay, pause: ytPause, setMuted: ytSetMuted, onIframeLoad, isPlaying: ytPlaying } = useYouTubePlayer(iframeRef);
 
-  // Track whether the card is on (or near) screen. Videos load the first time
-  // they get close, and are paused again whenever they scroll away so that
-  // 20+ autoplaying iframes/videos aren't all decoding at once.
+  const start = () => {
+    hoveringRef.current = true;
+    setHovering(true);
+    setMounted(true);
+    if (isYouTube) ytPlay();
+    else videoRef.current?.play().catch(() => {});
+  };
+
+  const halt = React.useCallback(() => {
+    hoveringRef.current = false;
+    setHovering(false);
+    if (isYouTube) ytPause();
+    else videoRef.current?.pause();
+  }, [isYouTube, ytPause]);
+
+  const stop = () => {
+    halt();
+    if (isUnmuted) setUnmutedId(null);
+  };
+
+  // Pause if the card scrolls away while playing, or when the full player opens.
   React.useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-        if (entry.isIntersecting) setHasBeenSeen(true);
-      },
-      { threshold: 0.1, rootMargin: '400px' }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+    if (!el || !isPlayable) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting && hoveringRef.current) halt();
+    });
+    io.observe(el);
+    window.addEventListener(PAUSE_PREVIEWS_EVENT, halt);
+    return () => {
+      io.disconnect();
+      window.removeEventListener(PAUSE_PREVIEWS_EVENT, halt);
+    };
+  }, [isPlayable, halt]);
 
-  // Keep playback in sync with visibility + the user's play/pause choice.
+  // Keep sound in sync with the shared "which card is unmuted" state.
   React.useEffect(() => {
-    if (!hasBeenSeen) return;
-    const shouldPlay = isVisible && isPlaying;
-    if (item.type === 'youtube') {
-      iframeRef.current?.contentWindow?.postMessage(
-        JSON.stringify({ event: 'command', func: shouldPlay ? 'playVideo' : 'pauseVideo' }), '*'
-      );
-    } else if (videoRef.current) {
-      if (shouldPlay) videoRef.current.play().catch(() => {});
-      else videoRef.current.pause();
-    }
-  }, [isVisible, isPlaying, hasBeenSeen, playerReady, item.type]);
+    if (isYouTube) ytSetMuted(!isUnmuted);
+    else if (videoRef.current) videoRef.current.muted = !isUnmuted;
+  }, [isUnmuted, isYouTube, ytSetMuted]);
 
-  // Handle Play/Pause logic
-  const togglePlay = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const newPlaying = !isPlaying;
-    setIsPlaying(newPlaying);
-    
-    if (item.type === 'youtube') {
-      const command = newPlaying ? 'playVideo' : 'pauseVideo';
-      iframeRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: command }), '*');
-    } else if (videoRef.current) {
-      if (newPlaying) videoRef.current.play().catch(() => {}); else videoRef.current.pause();
-    }
-  };
-
-  // Restart video helper
-  const restartVideo = () => {
-    if (item.type === 'youtube') {
-      iframeRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'seekTo', args: [0, true] }), '*');
-      iframeRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'playVideo' }), '*');
-    } else if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
-    }
-    setIsPlaying(true);
-  };
-
-  // Handle Mute/Unmute logic
   const toggleMute = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (isUnmuted) {
-      setUnmutedId(null);
-    } else {
-      setUnmutedId(item.id);
-      restartVideo(); // Restart when manually unmuted
-    }
+    e.stopPropagation(); // don't open the full player
+    setUnmutedId(isUnmuted ? null : item.id);
   };
 
-  // Sync mute state with global unmutedId
-  React.useEffect(() => {
-    if (item.type === 'youtube') {
-      const command = isUnmuted ? 'unMute' : 'mute';
-      iframeRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: command }), '*');
-    } else if (videoRef.current) {
-      videoRef.current.muted = !isUnmuted;
-    }
-  }, [isUnmuted, item.type]);
+  const playing = isYouTube ? ytPlaying && hovering : hovering && fileReady;
+
+  if (!isPlayable) {
+    return (
+      <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#0a0a0a]">
+        <img
+          src={item.src}
+          alt={item.title}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+      </div>
+    );
+  }
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className="absolute inset-0 w-full h-full overflow-hidden bg-[#0a0a0a] group/media cursor-pointer"
-      onClick={() => {
-        setUnmutedId(item.id);
-        restartVideo();
-      }}
+      onPointerEnter={(e) => isMousePointer(e) && start()}
+      onPointerLeave={(e) => isMousePointer(e) && stop()}
     >
-      {hasBeenSeen ? (
-        <div className="absolute inset-0 w-full h-full">
-          {item.type === 'youtube' ? (
-            <div className={cn(
-              "absolute w-[100%] h-[155%] -top-[27.5%] left-0 transform-gpu",
-              item.isVertical ? "scale-[1.35]" : item.isSquare ? "scale-[1.45]" : "scale-[1.3]"
-            )}>
-              <iframe
-                ref={iframeRef}
-                src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&rel=0&disablekb=1&iv_load_policy=3&playlist=${item.videoId}&enablejsapi=1&playsinline=1`}
-                className="w-full h-full border-none pointer-events-none"
-                allow="autoplay; encrypted-media"
-                title={item.title}
-                loading="lazy"
-                onLoad={() => setTimeout(() => setPlayerReady((n) => n + 1), 1500)}
-              />
-            </div>
-          ) : (item.type === 'video' || (item.type === 'cloudinary' && item.src?.endsWith('.mp4'))) ? (
-            <video
-              ref={videoRef}
-              src={item.src}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div 
-              className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: `url(${item.src})` }}
-            />
-          )}
-
-          {/* Overlay Controls */}
-          {(item.type === 'youtube' || item.type === 'video' || (item.type === 'cloudinary' && item.src?.endsWith('.mp4'))) && (
-            <>
-              {/* Play/Pause Center Button */}
-              <div 
-                className={cn(
-                  "absolute inset-0 flex items-center justify-center transition-all duration-300 z-10",
-                  isPlaying ? "opacity-0 group-hover/media:opacity-100 group-hover/media:bg-black/20" : "opacity-100 bg-black/40"
-                )}
-              >
-                <button 
-                  onClick={togglePlay}
-                  className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all hover:scale-110 active:scale-95"
-                >
-                  {isPlaying ? <Pause size={32} fill="currentColor" /> : <Play size={32} className="ml-1" fill="currentColor" />}
-                </button>
-              </div>
-
-              {/* Mute Toggle Bottom Corner */}
-              <div className="absolute bottom-4 right-4 z-20">
-                <button 
-                  onClick={toggleMute}
-                  className={cn(
-                    "w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300",
-                    isUnmuted 
-                      ? "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.5)]" 
-                      : "bg-black/40 text-white border-white/20 backdrop-blur-md hover:bg-white/10"
-                  )}
-                >
-                  {isUnmuted ? <Volume2 size={18} /> : <VolumeX size={18} />}
-                </button>
-              </div>
-            </>
-          )}
+      {/* Player: only exists after the first hover */}
+      {mounted && isYouTube && (
+        <div className={cn(
+          "absolute w-[100%] h-[155%] -top-[27.5%] left-0 transform-gpu",
+          item.isVertical ? "scale-[1.35]" : item.isSquare ? "scale-[1.45]" : "scale-[1.3]"
+        )}>
+          <iframe
+            ref={iframeRef}
+            src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&rel=0&disablekb=1&iv_load_policy=3&playlist=${item.videoId}&enablejsapi=1&playsinline=1`}
+            className="w-full h-full border-none pointer-events-none"
+            allow="autoplay; encrypted-media"
+            title={item.title}
+            tabIndex={-1}
+            onLoad={onIframeLoad}
+          />
         </div>
-      ) : (
-        <div 
-          className="w-full h-full bg-[#0a0a0a] bg-cover bg-center"
-          style={{ 
-            backgroundImage: item.type === 'youtube' 
-              ? `url(https://img.youtube.com/vi/${item.videoId}/maxresdefault.jpg)` 
-              : `url(${item.src})` 
-          }}
+      )}
+      {isVideoFile && (
+        <video
+          ref={videoRef}
+          src={mounted ? item.src : undefined}
+          preload="none"
+          loop
+          muted
+          playsInline
+          onPlaying={() => setFileReady(true)}
+          className="absolute inset-0 w-full h-full object-cover"
         />
       )}
+
+      {/* Cover image: shown until the video is actually playing (no black flash) */}
+      <img
+        src={isYouTube ? ytThumb(item.videoId) : item.poster || item.src}
+        onLoad={isYouTube ? (e) => onThumbLoad(e, item.videoId) : undefined}
+        alt={item.title}
+        loading="lazy"
+        decoding="async"
+        className={cn(
+          "absolute inset-0 w-full h-full object-cover transition-opacity duration-500 pointer-events-none",
+          playing ? "opacity-0" : "opacity-100"
+        )}
+      />
+
+      {/* Play hint while idle */}
+      <div className={cn(
+        "absolute inset-0 flex items-center justify-center transition-opacity duration-300 pointer-events-none z-10",
+        playing ? "opacity-0" : "opacity-100 bg-black/20"
+      )}>
+        <span className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white">
+          {hovering && !playing ? (
+            <span className="w-6 h-6 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+          ) : (
+            <Play size={26} className="ml-1" fill="currentColor" />
+          )}
+        </span>
+      </div>
+
+      {/* Sound toggle (only while previewing) */}
+      <div className={cn(
+        "absolute bottom-4 right-4 z-20 transition-opacity duration-300",
+        hovering ? "opacity-100" : "opacity-0 pointer-events-none"
+      )}>
+        <button
+          type="button"
+          onClick={toggleMute}
+          aria-label={isUnmuted ? "Mute preview" : "Unmute preview"}
+          className={cn(
+            "w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300",
+            isUnmuted
+              ? "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.5)]"
+              : "bg-black/40 text-white border-white/20 backdrop-blur-md hover:bg-white/10"
+          )}
+        >
+          {isUnmuted ? <Volume2 size={18} /> : <VolumeX size={18} />}
+        </button>
+      </div>
     </div>
   );
 });
+MediaContent.displayName = 'MediaContent';
 
 const optimizeCloudinaryUrl = (url: string) => {
   if (!url || !url.includes('cloudinary.com')) return url;
@@ -210,7 +203,71 @@ const optimizeCloudinaryUrl = (url: string) => {
   return url;
 };
 
-const VideoFrameGrid = null; // Removed
+const workSlug = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+// Quick-jump menu shown under the showreel. Each button scrolls straight to
+// its part of the archive (accounts for the fixed navbar).
+const JUMP_GROUPS = [
+  {
+    label: 'Videos',
+    links: [
+      { label: 'AI/DTC', id: `work-sub-${workSlug('AI/DTC')}` },
+      { label: 'AI Film Making/Microdramas', id: `work-sub-${workSlug('AI FILM MAKING/MICRODRAMAS')}` },
+      { label: 'Launch/SAAS Videos', id: `work-sub-${workSlug('Launch/SAAS Videos')}` },
+      { label: 'Talking Head Videos', id: `work-sub-${workSlug('Talking head Videos')}` },
+    ],
+  },
+  {
+    label: 'Graphic Design',
+    links: [
+      { label: 'Carousel', id: 'work-carousel' },
+      { label: 'Menu', id: 'work-menu' },
+      { label: 'Social Media', id: 'work-post-designs' },
+    ],
+  },
+];
+
+// Sections fade/slide in the first time they appear, so their position shifts
+// slightly while the page is gliding there. Scroll, then correct once after
+// the glide finishes so the heading always ends up just under the navbar.
+const jumpTo = (id: string) => {
+  scrollToTarget(id, -110);
+  window.setTimeout(() => scrollToTarget(id, -110), 1400);
+};
+
+const WorkJumpNav = () => (
+  <nav aria-label="Jump to a work category" className="mb-32 flex flex-col items-center gap-8">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/30">
+      Jump to a category
+    </p>
+    <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-0">
+      {JUMP_GROUPS.map((group, gIdx) => (
+        <div
+          key={group.label}
+          className={cn(
+            "flex flex-col items-center gap-4 md:px-10",
+            gIdx > 0 && "md:border-l md:border-white/10"
+          )}
+        >
+          <span className="text-xl md:text-2xl font-serif italic text-white/60">{group.label}</span>
+          <div className="flex flex-wrap justify-center gap-2 md:gap-3 max-w-[560px]">
+            {group.links.map((link) => (
+              <button
+                key={link.id}
+                type="button"
+                onClick={() => jumpTo(link.id)}
+                className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-xs md:text-sm text-white/70 backdrop-blur-md transition-all duration-300 hover:bg-white hover:text-black hover:border-white active:scale-95"
+              >
+                {link.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </nav>
+);
 
 const AllWork = () => {
   const [selectedVideo, setSelectedVideo] = useState<WorkItem | null>(null);
@@ -354,6 +411,7 @@ const AllWork = () => {
 
   React.useEffect(() => {
     if (!selectedVideo) return;
+    window.dispatchEvent(new Event(PAUSE_PREVIEWS_EVENT)); // stop any hover preview behind the modal
     stopSmoothScroll();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setSelectedVideo(null);
@@ -417,12 +475,14 @@ const AllWork = () => {
 
         <MacbookShowcase />
 
+        <WorkJumpNav />
+
         {categories.map((category) => (
           <SectionReveal 
             key={category.index} 
             id={`work-${category.name.toLowerCase().replace(/\s+/g, '-')}`} 
             variant="fade-up"
-            className="mb-32 relative"
+            className="mb-32 relative scroll-mt-28"
           >
             {/* Category Header */}
             {category.name !== "Post Designs" && (
@@ -451,7 +511,7 @@ const AllWork = () => {
               const squareItems = sub.items.filter(item => (item as any).isSquare);
 
               return (
-                <div key={sub.name} className={sIdx === 0 ? "mt-0" : "mt-24"}>
+                <div key={sub.name} id={`work-sub-${workSlug(sub.name)}`} className={cn(sIdx === 0 ? "mt-0" : "mt-24", "scroll-mt-28")}>
                   {sub.name !== "Advertisements" && category.name !== "Carousel" && (
                     <div className="flex items-center gap-4 mb-8">
                       <h4 className="text-xl md:text-2xl font-serif text-white/60 tracking-tight italic">
@@ -521,7 +581,7 @@ const AllWork = () => {
                                 ? "w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)]"
                                 : "w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]";
                             return (
-                              <div key={item.id} className={cn(widthClass, isSaasVideos ? "max-w-[560px]" : "max-w-[420px]", "transform-gpu will-change-transform")}>
+                              <div key={item.id} className={cn(widthClass, isSaasVideos ? "max-w-[560px]" : "max-w-[420px]")}>
                                 <motion.div 
                                   className="aspect-video rounded-[1.8rem] overflow-hidden relative group cursor-pointer p-0 border border-white/5 bg-[#111]"
                                 >
@@ -547,7 +607,7 @@ const AllWork = () => {
                               ? "w-[calc(50%-12px)] sm:w-[calc(33.33%-16px)] lg:w-[calc(20%-20px)]"
                               : "w-[calc(50%-12px)] sm:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)]";
                             return (
-                              <div key={item.id} className={cn(widthClass, "max-w-[280px] transform-gpu will-change-transform")}>
+                              <div key={item.id} className={cn(widthClass, "max-w-[280px]")}>
                                 <motion.div 
                                   className="aspect-[9/16] rounded-[1.8rem] overflow-hidden relative group cursor-pointer p-0 border border-white/5 bg-[#111]"
                                 >
@@ -569,7 +629,7 @@ const AllWork = () => {
                       {squareItems.length > 0 && (
                         <div className="flex flex-wrap justify-center gap-6">
                           {squareItems.map((item: any, idx) => (
-                            <div key={item.id} className="w-[calc(50%-12px)] md:w-[calc(33.33%-16px)] max-w-[340px] transform-gpu will-change-transform">
+                            <div key={item.id} className="w-[calc(50%-12px)] md:w-[calc(33.33%-16px)] max-w-[340px]">
                               <motion.div 
                                 className="aspect-square rounded-[1.8rem] overflow-hidden relative group cursor-pointer p-0 border border-white/5 bg-[#111]"
                               >
