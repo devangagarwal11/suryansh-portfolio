@@ -1,18 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Lenis from "lenis";
 
+type LenisWindow = Window & { lenis?: Lenis };
+
 export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
-  const lenisRef = useRef<Lenis | null>(null);
-
   useEffect(() => {
-    // Respect reduced motion preference
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (prefersReducedMotion) return;
+    // Respect reduced motion + skip on touch devices (native momentum scrolling
+    // is smoother there than any JS imitation of it).
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+    if (prefersReducedMotion || isTouch) return;
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -21,28 +20,22 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 2,
       autoResize: true,
+      // Makes plain <a href="#section"> links (the nav dock, footer) glide via Lenis.
+      anchors: true,
     });
 
-    lenisRef.current = lenis;
-    (window as any).lenis = lenis;
+    (window as LenisWindow).lenis = lenis;
 
-    // Set up requestAnimationFrame
-    let rafId: number;
-
-    function raf(time: number) {
+    let rafId = requestAnimationFrame(function raf(time: number) {
       lenis.raf(time);
       rafId = requestAnimationFrame(raf);
-    }
-
-    rafId = requestAnimationFrame(raf);
+    });
 
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
-      lenisRef.current = null;
-      delete (window as any).lenis;
+      delete (window as LenisWindow).lenis;
     };
   }, []);
 
