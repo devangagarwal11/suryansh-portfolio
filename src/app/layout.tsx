@@ -26,12 +26,12 @@ const geistMono = Geist_Mono({
 const dmSerifDisplay = DM_Serif_Display({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-dm-serif",
 });
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-dm-sans",
 });
 
 export const metadata: Metadata = {

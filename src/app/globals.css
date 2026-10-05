@@ -13,9 +13,22 @@
   --border: rgba(255, 255, 255, 0.05);
   --accent: #ffffff;
   
-  /* Typography */
-  --font-serif: var(--font-serif), "DM Serif Display", serif;
-  --font-sans: var(--font-sans), "DM Sans", sans-serif;
+  /* Tokens referenced across components (were previously undefined) */
+  --gradient-start: #ffffff;
+  --gradient-end: #9a9a9a;
+  --container-max-width: 1400px;
+  --container-padding: 1.5rem;
+  --section-padding: 6rem;
+  --duration-normal: 300ms;
+  --duration-slow: 600ms;
+  --ease-default: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Typography. The next/font variables are --font-dm-serif / --font-dm-sans.
+     (The old setup defined --font-serif in terms of itself, which is invalid CSS
+     and made the fonts fall back / flash.) */
+  --app-font-serif: var(--font-dm-serif, "DM Serif Display"), Georgia, serif;
+  --app-font-sans: var(--font-dm-sans, "DM Sans"), system-ui, sans-serif;
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -30,8 +43,8 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
-  --font-serif: var(--font-serif);
-  --font-sans: var(--font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-sans: var(--app-font-sans);
 
   --animate-spotlight: spotlight 2s ease .75s 1 forwards;
 
@@ -53,30 +66,54 @@
 
 * {
   border-color: var(--border);
-  cursor: none !important;
 }
 
-.native-cursor,
-.native-cursor * {
-  cursor: auto !important;
-}
+/* Hide the native cursor only where the custom cursor is actually rendered
+   (mouse / trackpad). Touch devices keep default behaviour. */
+@media (hover: hover) and (pointer: fine) {
+  html,
+  html * {
+    cursor: none !important;
+  }
 
-html {
-  cursor: none !important;
+  .native-cursor,
+  .native-cursor * {
+    cursor: auto !important;
+  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: var(--app-font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  cursor: none !important;
 }
 
 ::selection {
   background: var(--gradient-start);
   color: #ffffff;
+}
+
+/* ============================================
+   LENIS (smooth scroll) base styles
+   ============================================ */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
 }
 
 /* ============================================
@@ -227,8 +264,9 @@ body {
   position: absolute; 
   inset: 0;
   /* Optimized noise using a lightweight tiling image instead of expensive SVG turbulence */
-  background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
-  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  opacity: 0.035;
   pointer-events: none;
 }
 
