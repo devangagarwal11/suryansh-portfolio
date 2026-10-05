@@ -10,7 +10,7 @@ import { Flipbook } from '@/components/ui/Flipbook';
 import { SectionReveal } from '@/components/ui/SectionReveal';
 import { MacbookShowcase } from '@/components/ui/MacbookShowcase';
 import { TextScramble } from '@/components/ui/text-scramble';
-import { startSmoothScroll, stopSmoothScroll } from '@/lib/scroll';
+import { startSmoothScroll, stopSmoothScroll, scrollToTarget } from '@/lib/scroll';
 import { useYouTubePlayer, isMousePointer, ytThumb, onThumbLoad } from '@/lib/youtube';
 interface WorkItem {
   id: string;
@@ -202,6 +202,64 @@ const optimizeCloudinaryUrl = (url: string) => {
   }
   return url;
 };
+
+const workSlug = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+// Quick-jump menu shown under the showreel. Each button scrolls straight to
+// its part of the archive (accounts for the fixed navbar).
+const JUMP_GROUPS = [
+  {
+    label: 'Videos',
+    links: [
+      { label: 'AI/DTC', id: `work-sub-${workSlug('AI/DTC')}` },
+      { label: 'AI Film Making/Microdramas', id: `work-sub-${workSlug('AI FILM MAKING/MICRODRAMAS')}` },
+      { label: 'Launch/SAAS Videos', id: `work-sub-${workSlug('Launch/SAAS Videos')}` },
+      { label: 'Talking Head Videos', id: `work-sub-${workSlug('Talking head Videos')}` },
+    ],
+  },
+  {
+    label: 'Graphic Design',
+    links: [
+      { label: 'Carousel', id: 'work-carousel' },
+      { label: 'Menu', id: 'work-menu' },
+      { label: 'Social Media', id: 'work-post-designs' },
+    ],
+  },
+];
+
+const WorkJumpNav = () => (
+  <nav aria-label="Jump to a work category" className="mb-32 flex flex-col items-center gap-8">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/30">
+      Jump to a category
+    </p>
+    <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-0">
+      {JUMP_GROUPS.map((group, gIdx) => (
+        <div
+          key={group.label}
+          className={cn(
+            "flex flex-col items-center gap-4 md:px-10",
+            gIdx > 0 && "md:border-l md:border-white/10"
+          )}
+        >
+          <span className="text-xl md:text-2xl font-serif italic text-white/60">{group.label}</span>
+          <div className="flex flex-wrap justify-center gap-2 md:gap-3 max-w-[560px]">
+            {group.links.map((link) => (
+              <button
+                key={link.id}
+                type="button"
+                onClick={() => scrollToTarget(link.id, -110)}
+                className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-xs md:text-sm text-white/70 backdrop-blur-md transition-all duration-300 hover:bg-white hover:text-black hover:border-white active:scale-95"
+              >
+                {link.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </nav>
+);
 
 const AllWork = () => {
   const [selectedVideo, setSelectedVideo] = useState<WorkItem | null>(null);
@@ -409,12 +467,14 @@ const AllWork = () => {
 
         <MacbookShowcase />
 
+        <WorkJumpNav />
+
         {categories.map((category) => (
           <SectionReveal 
             key={category.index} 
             id={`work-${category.name.toLowerCase().replace(/\s+/g, '-')}`} 
             variant="fade-up"
-            className="mb-32 relative"
+            className="mb-32 relative scroll-mt-28"
           >
             {/* Category Header */}
             {category.name !== "Post Designs" && (
@@ -443,7 +503,7 @@ const AllWork = () => {
               const squareItems = sub.items.filter(item => (item as any).isSquare);
 
               return (
-                <div key={sub.name} className={sIdx === 0 ? "mt-0" : "mt-24"}>
+                <div key={sub.name} id={`work-sub-${workSlug(sub.name)}`} className={cn(sIdx === 0 ? "mt-0" : "mt-24", "scroll-mt-28")}>
                   {sub.name !== "Advertisements" && category.name !== "Carousel" && (
                     <div className="flex items-center gap-4 mb-8">
                       <h4 className="text-xl md:text-2xl font-serif text-white/60 tracking-tight italic">
