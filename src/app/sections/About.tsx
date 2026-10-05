@@ -92,8 +92,16 @@ export const About = () => {
   ];
 
   return (
-    <section id="about" className="pt-32 pb-24 bg-[#0c0c0c]">
-      <div className="max-w-[1300px] mx-auto px-6">
+    <section id="about" className="relative pt-32 pb-24">
+      {/* Transparent on purpose: the site-wide animated background (stars,
+          streaks, smoke) continues from the hero through this section. The
+          gradient at the bottom fades it into the solid All Work section
+          so there is no hard edge. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-[#080808]"
+      />
+      <div className="relative max-w-[1300px] mx-auto px-6">
         {/* Section Header */}
         <SectionReveal variant="fade-up" className="flex justify-center mb-10">
           <p className="text-white/40 text-center max-w-md text-base font-medium">
