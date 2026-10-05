@@ -228,6 +228,14 @@ const JUMP_GROUPS = [
   },
 ];
 
+// Sections fade/slide in the first time they appear, so their position shifts
+// slightly while the page is gliding there. Scroll, then correct once after
+// the glide finishes so the heading always ends up just under the navbar.
+const jumpTo = (id: string) => {
+  scrollToTarget(id, -110);
+  window.setTimeout(() => scrollToTarget(id, -110), 1400);
+};
+
 const WorkJumpNav = () => (
   <nav aria-label="Jump to a work category" className="mb-32 flex flex-col items-center gap-8">
     <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/30">
@@ -248,7 +256,7 @@ const WorkJumpNav = () => (
               <button
                 key={link.id}
                 type="button"
-                onClick={() => scrollToTarget(link.id, -110)}
+                onClick={() => jumpTo(link.id)}
                 className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-xs md:text-sm text-white/70 backdrop-blur-md transition-all duration-300 hover:bg-white hover:text-black hover:border-white active:scale-95"
               >
                 {link.label}
