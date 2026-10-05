@@ -9,6 +9,7 @@ import { Spotlight } from "@/components/ui/spotlight";
 import { RandomLetterSwapPingPong } from "@/components/ui/random-letter-swap";
 
 import { TextScramble } from "@/components/ui/text-scramble";
+import { scrollToTarget } from "@/lib/scroll";
 
 const FloatingShapes = dynamic(
   () => import("@/components/ui/FloatingShapes").then(m => ({ default: m.FloatingShapes })),
@@ -65,7 +66,7 @@ export const Hero = () => {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
-                    onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                    onClick={() => scrollToTarget('contact')}
                     className="flex items-center justify-center w-8 h-8 md:w-14 md:h-14 rounded-full border border-white/10 bg-white/5 align-middle hover:bg-white hover:text-black transition-colors duration-500 cursor-pointer"
                   >
                     <ArrowUpRight className="w-3 h-3 md:w-5 md:h-5" />
@@ -91,7 +92,7 @@ export const Hero = () => {
             className="flex flex-wrap gap-4 md:gap-6 mt-4"
           >
             <LiquidButton 
-              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => scrollToTarget('projects')}
               size="lg"
             >
               See All Projects
@@ -99,7 +100,7 @@ export const Hero = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => scrollToTarget('contact')}
               className="flex items-center justify-center bg-white text-[#0c0c0c] px-8 h-10 rounded-md text-sm font-semibold hover:bg-white/90 transition-colors"
             >
               Contact Now

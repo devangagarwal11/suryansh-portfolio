@@ -7,6 +7,7 @@ import Image from "next/image";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import { RandomLetterSwapPingPong } from "@/components/ui/random-letter-swap";
 import { SectionReveal } from "@/components/ui/SectionReveal";
+import { scrollToTarget } from "@/lib/scroll";
 
 export const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
@@ -79,13 +80,13 @@ export const FAQ = () => {
 
             <div className="flex gap-4">
               <LiquidButton 
-                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => scrollToTarget('projects')}
                 size="lg"
               >
                 See All Projects
               </LiquidButton>
               <LiquidButton 
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => scrollToTarget('contact')}
                 size="lg"
               >
                 Contact Now

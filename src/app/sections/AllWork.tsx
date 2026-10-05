@@ -10,6 +10,7 @@ import { Flipbook } from '@/components/ui/Flipbook';
 import { SectionReveal } from '@/components/ui/SectionReveal';
 import { MacbookShowcase } from '@/components/ui/MacbookShowcase';
 import { TextScramble } from '@/components/ui/text-scramble';
+import { startSmoothScroll, stopSmoothScroll } from '@/lib/scroll';
 interface WorkItem {
   id: string;
   title: string;
@@ -28,20 +29,39 @@ const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any,
   const iframeRef = React.useRef<HTMLIFrameElement>(null);
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
+  const [isVisible, setIsVisible] = React.useState(false);
+  const [playerReady, setPlayerReady] = React.useState(0);
+
+  // Track whether the card is on (or near) screen. Videos load the first time
+  // they get close, and are paused again whenever they scroll away so that
+  // 20+ autoplaying iframes/videos aren't all decoding at once.
   React.useEffect(() => {
-    if (hasBeenSeen) return; // Already loaded, no need to observe
+    const el = containerRef.current;
+    if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setHasBeenSeen(true);
-          observer.disconnect(); // Stop observing once loaded
-        }
+        setIsVisible(entry.isIntersecting);
+        if (entry.isIntersecting) setHasBeenSeen(true);
       },
       { threshold: 0.1, rootMargin: '400px' }
     );
-    if (containerRef.current) observer.observe(containerRef.current);
+    observer.observe(el);
     return () => observer.disconnect();
-  }, [hasBeenSeen]);
+  }, []);
+
+  // Keep playback in sync with visibility + the user's play/pause choice.
+  React.useEffect(() => {
+    if (!hasBeenSeen) return;
+    const shouldPlay = isVisible && isPlaying;
+    if (item.type === 'youtube') {
+      iframeRef.current?.contentWindow?.postMessage(
+        JSON.stringify({ event: 'command', func: shouldPlay ? 'playVideo' : 'pauseVideo' }), '*'
+      );
+    } else if (videoRef.current) {
+      if (shouldPlay) videoRef.current.play().catch(() => {});
+      else videoRef.current.pause();
+    }
+  }, [isVisible, isPlaying, hasBeenSeen, playerReady, item.type]);
 
   // Handle Play/Pause logic
   const togglePlay = (e: React.MouseEvent) => {
@@ -53,7 +73,7 @@ const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any,
       const command = newPlaying ? 'playVideo' : 'pauseVideo';
       iframeRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: command }), '*');
     } else if (videoRef.current) {
-      newPlaying ? videoRef.current.play() : videoRef.current.pause();
+      if (newPlaying) videoRef.current.play().catch(() => {}); else videoRef.current.pause();
     }
   };
 
@@ -64,7 +84,7 @@ const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any,
       iframeRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'playVideo' }), '*');
     } else if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play();
+      videoRef.current.play().catch(() => {});
     }
     setIsPlaying(true);
   };
@@ -113,6 +133,7 @@ const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any,
                 allow="autoplay; encrypted-media"
                 title={item.title}
                 loading="lazy"
+                onLoad={() => setTimeout(() => setPlayerReady((n) => n + 1), 1500)}
               />
             </div>
           ) : (item.type === 'video' || (item.type === 'cloudinary' && item.src?.endsWith('.mp4'))) ? (
@@ -331,6 +352,19 @@ const AllWork = () => {
     }
   ], []);
 
+  React.useEffect(() => {
+    if (!selectedVideo) return;
+    stopSmoothScroll();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedVideo(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      startSmoothScroll();
+    };
+  }, [selectedVideo]);
+
   return (
     <section id="projects" className="projects-section pt-40 pb-32 bg-[#080808] relative overflow-hidden font-sans">
       <div className="absolute top-1/4 -left-20 w-96 h-96 bg-purple-500/5 blur-[120px] rounded-full pointer-events-none" />
@@ -394,7 +428,7 @@ const AllWork = () => {
             {category.name !== "Post Designs" && (
               <div className="flex flex-col gap-4 mb-12">
                 <div className="flex items-center gap-4">
-                  <span className="text-xs fo  nt-bold text-white/20 tracking-widest uppercase">0{category.index}</span>
+                  <span className="text-xs font-bold text-white/20 tracking-widest uppercase">0{category.index}</span>
                   <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent" />
                 </div>
                 <div className="flex items-baseline gap-4">
@@ -567,6 +601,7 @@ const AllWork = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            data-lenis-prevent
             className="fixed inset-0 z-[110] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 md:p-10"
           >
             <button

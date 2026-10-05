@@ -7,6 +7,7 @@ import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import { RandomLetterSwapPingPong } from "@/components/ui/random-letter-swap";
 import { GlowCard } from "@/components/ui/spotlight-card";
 import { SectionReveal } from "@/components/ui/SectionReveal";
+import { scrollToTarget } from "@/lib/scroll";
 
 const testimonials = [
   {
@@ -68,13 +69,13 @@ export const Testimonials = () => {
 
             <div className="flex flex-wrap gap-3 md:gap-4">
               <LiquidButton 
-                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => scrollToTarget('projects')}
                 size="lg"
               >
                 See All Projects
               </LiquidButton>
               <LiquidButton 
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => scrollToTarget('contact')}
                 size="lg"
               >
                 Contact Now

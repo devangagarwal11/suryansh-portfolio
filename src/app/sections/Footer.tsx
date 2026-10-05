@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowUp, Heart, Instagram, Linkedin, Youtube, Mail } from "lucide-react";
 import { XLogo as Twitter } from "@/components/ui/Icons";
 import { RandomLetterSwapPingPong } from "@/components/ui/random-letter-swap";
+import { scrollToTarget } from "@/lib/scroll";
 
 type SocialLinkItem = {
   name: string;
@@ -19,7 +20,7 @@ const socialLinksData: SocialLinkItem[] = [
 
 export function Footer() {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToTarget(0);
   };
 
   return (
