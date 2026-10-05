@@ -214,7 +214,7 @@ export const About = () => {
                 </h3>
                 <div className="flex flex-col gap-6">
                   <TextEffect preset="blur" className="text-xl md:text-2xl text-white/80 leading-relaxed font-serif">
-                    I am a versatile AI Visual Creator and Motion Artist specializing in high-end AI video synthesis, cinematic motion graphics, and premium brand storytelling. 
+                    I direct AI video and motion design for YC startups and 8 and 9 figure DTC brands. 
                   </TextEffect>
                 </div>
 
