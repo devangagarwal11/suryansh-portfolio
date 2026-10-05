@@ -81,7 +81,7 @@ export const Hero = () => {
               delay={0.8}
               className="text-base md:text-xl text-white/60 max-w-xl leading-relaxed"
             >
-              I am a versatile AI Visual Creator and Motion Artist specializing in high-end AI video synthesis, cinematic motion graphics, and premium brand storytelling.
+              Video Creative Director. YC launch videos and DTC ads for 8 and 9 figure brands.
             </TextEffect>
           </div>
 
