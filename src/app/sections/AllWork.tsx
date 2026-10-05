@@ -110,6 +110,7 @@ const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any,
   return (
     <div
       ref={containerRef}
+      data-cursor="dollar"
       className="absolute inset-0 w-full h-full overflow-hidden bg-[#0a0a0a] group/media cursor-pointer"
       onPointerEnter={(e) => isMousePointer(e) && start()}
       onPointerLeave={(e) => isMousePointer(e) && stop()}
