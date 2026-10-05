@@ -1,8 +1,19 @@
 'use client'
 
-import { useState } from "react"
+import { useMemo, useRef } from "react"
 import { AnimationOptions, motion, useAnimate } from "framer-motion"
 import { debounce } from "lodash"
+
+// Random letter order, computed once per label (not on every render, which made
+// the letters re-shuffle mid-animation and caused visible jumps).
+function shuffledOrder(length: number) {
+  const order = Array.from({ length }, (_, i) => i)
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[order[i], order[j]] = [order[j], order[i]]
+  }
+  return order
+}
 
 interface TextProps {
   label: string
@@ -26,22 +37,20 @@ export function RandomLetterSwapForward({
   ...props
 }: TextProps) {
   const [scope, animate] = useAnimate()
-  const [blocked, setBlocked] = useState(false)
+  // A ref (not state): toggling it must not re-render and re-create the debounced handlers
+  const blocked = useRef(false)
 
   const mergeTransition = (transition: AnimationOptions, i: number) => ({
     ...transition,
     delay: i * staggerDuration,
   })
 
-  const shuffledIndices = Array.from(
-    { length: label.length },
-    (_, i) => i
-  ).sort(() => Math.random() - 0.5)
+  const shuffledIndices = useMemo(() => shuffledOrder(label.length), [label.length])
 
   const hoverStart = debounce(
     () => {
-      if (blocked) return
-      setBlocked(true)
+      if (blocked.current) return
+      blocked.current = true
 
       for (let i = 0; i < label.length; i++) {
         const randomIndex = shuffledIndices[i]
@@ -83,7 +92,7 @@ export function RandomLetterSwapForward({
           })
           .then(() => {
             if (i === label.length - 1) {
-              setBlocked(false)
+              blocked.current = false
             }
           })
       }
@@ -138,22 +147,20 @@ export function RandomLetterSwapPingPong({
   ...props
 }: TextProps) {
   const [scope, animate] = useAnimate()
-  const [blocked, setBlocked] = useState(false)
+  // A ref (not state): toggling it must not re-render and re-create the debounced handlers
+  const blocked = useRef(false)
 
   const mergeTransition = (transition: AnimationOptions, i: number) => ({
     ...transition,
     delay: i * staggerDuration,
   })
 
-  const shuffledIndices = Array.from(
-    { length: label.length },
-    (_, i) => i
-  ).sort(() => Math.random() - 0.5)
+  const shuffledIndices = useMemo(() => shuffledOrder(label.length), [label.length])
 
   const hoverStart = debounce(
     () => {
-      if (blocked) return
-      setBlocked(true)
+      if (blocked.current) return
+      blocked.current = true
 
       for (let i = 0; i < label.length; i++) {
         const randomIndex = shuffledIndices[i]
@@ -180,7 +187,7 @@ export function RandomLetterSwapPingPong({
 
   const hoverEnd = debounce(
     () => {
-      setBlocked(false)
+      blocked.current = false
 
       for (let i = 0; i < label.length; i++) {
         const randomIndex = shuffledIndices[i]
