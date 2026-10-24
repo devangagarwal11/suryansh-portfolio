@@ -214,7 +214,7 @@ const JUMP_GROUPS = [
   {
     label: 'Videos',
     links: [
-      { label: 'AI/DTC', id: `work-sub-${workSlug('AI/DTC')}` },
+      { label: 'AI/DTC', id: `work-sub-${workSlug('AI DTC Videos')}` },
       { label: 'AI Film Making/Microdramas', id: `work-sub-${workSlug('AI FILM MAKING/MICRODRAMAS')}` },
       { label: 'Launch/SAAS Videos', id: `work-sub-${workSlug('Launch/SAAS Videos')}` },
       { label: 'Talking Head Videos', id: `work-sub-${workSlug('Talking head Videos')}` },
@@ -284,7 +284,7 @@ const AllWork = () => {
       cardType: "card-amber",
       subcategories: [
         {
-          name: "AI/DTC",
+          name: "AI DTC Videos",
           items: [
             { id: "ai-adv-1", title: "Visual Storytelling", tag: "Visual", type: "youtube", videoId: "QMbXjcB3Xsg", poster: "/images/thumbs/QMbXjcB3Xsg.jpg", isVertical: true },
             { id: "ai-adv-4", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "VPJrA3eK7eU", poster: "/images/thumbs/VPJrA3eK7eU.jpg", isVertical: true },
