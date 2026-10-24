@@ -324,7 +324,7 @@ const AllWork = () => {
           name: "Launch/SAAS Videos",
           items: [
             { id: "saas-1", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "pzTZtvfVRRA", poster: "/images/thumbs/pzTZtvfVRRA.jpg" },
-            { id: "saas-2", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "XSLiZ0sfFm0" },
+            { id: "saas-2", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "XSLiZ0sfFm0", poster: "/images/thumbs/XSLiZ0sfFm0.jpg" },
             { id: "saas-3", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "CJLH_LOea24" },
             { id: "saas-4", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "-HR2t46Vx_s" },
           ]
