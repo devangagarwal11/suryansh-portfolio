@@ -291,7 +291,7 @@ const AllWork = () => {
             // { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789548674/UGC_26_Huevia_V2.mp4", isVertical: true },
             { id: "ai-adv-3", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "LTbDSu4Kg_4", isVertical: true },
             { id: "ai-adv-4", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "liXvY6yX12Y", isVertical: true },
-            { id: "ai-adv-5", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "cPIQJytn_8U", isVertical: true },
+            { id: "ai-adv-5", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "cPIQJytn_8U", poster: "/images/thumbs/cPIQJytn_8U.jpg", isVertical: true },
             { id: "ai-adv-6", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "Bz7Chv_TA90", poster: "/images/thumbs/Bz7Chv_TA90.jpg", isVertical: true },
             { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "5TcG-SXNxqg", poster: "/images/thumbs/5TcG-SXNxqg.jpg", isVertical: true },
             { id: "ai-adv-8", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "JU4HkqAuxQk", poster: "/images/thumbs/JU4HkqAuxQk.jpg", isVertical: true },
