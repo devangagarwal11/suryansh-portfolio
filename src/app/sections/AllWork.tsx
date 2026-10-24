@@ -19,6 +19,7 @@ interface WorkItem {
   type: 'youtube' | 'cloudinary' | 'image';
   videoId?: string;
   src?: string;
+  poster?: string;
   isVertical?: boolean;
   isSquare?: boolean;
 }
@@ -147,8 +148,8 @@ const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any,
 
       {/* Cover image: shown until the video is actually playing (no black flash) */}
       <img
-        src={isYouTube ? ytThumb(item.videoId) : item.poster || item.src}
-        onLoad={isYouTube ? (e) => onThumbLoad(e, item.videoId) : undefined}
+        src={item.poster || (isYouTube ? ytThumb(item.videoId) : item.src)}
+        onLoad={isYouTube && !item.poster ? (e) => onThumbLoad(e, item.videoId) : undefined}
         alt={item.title}
         loading="lazy"
         decoding="async"
@@ -297,7 +298,7 @@ const AllWork = () => {
             { id: "ai-adv-9", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "C9CtqgNNbjw", isVertical: true },
             { id: "ai-cart-1", title: "Animated Cartoon Feature", tag: "Animation", type: "youtube", videoId: "B3Yjbh1rXqg", isVertical: true },
             { id: "ai-adv-10", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "-BdDyhrFpxo", isVertical: true },
-            { id: "ai-adv-11", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "YffQvvydbz0", isVertical: true },
+            { id: "ai-adv-11", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "YffQvvydbz0", poster: "/images/thumbs/YffQvvydbz0.jpg", isVertical: true },
           ]
         },
         {
