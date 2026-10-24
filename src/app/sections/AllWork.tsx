@@ -287,18 +287,18 @@ const AllWork = () => {
           name: "AI/DTC",
           items: [
             { id: "ai-adv-1", title: "Visual Storytelling", tag: "Visual", type: "youtube", videoId: "QMbXjcB3Xsg", poster: "/images/thumbs/QMbXjcB3Xsg.jpg", isVertical: true },
-            { id: "ai-adv-2", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "sJhBE6H2PMY", isVertical: true },
-            // { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789548674/UGC_26_Huevia_V2.mp4", isVertical: true },
-            { id: "ai-adv-3", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "LTbDSu4Kg_4", poster: "/images/thumbs/LTbDSu4Kg_4.jpg", isVertical: true },
             { id: "ai-adv-4", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "VPJrA3eK7eU", poster: "/images/thumbs/VPJrA3eK7eU.jpg", isVertical: true },
+            // { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789548674/UGC_26_Huevia_V2.mp4", isVertical: true },
+            { id: "ai-adv-8", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "JU4HkqAuxQk", poster: "/images/thumbs/JU4HkqAuxQk.jpg", isVertical: true },
+            { id: "ai-adv-11", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "YffQvvydbz0", poster: "/images/thumbs/YffQvvydbz0.jpg", isVertical: true },
             { id: "ai-adv-5", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "cPIQJytn_8U", poster: "/images/thumbs/cPIQJytn_8U.jpg", isVertical: true },
             { id: "ai-adv-6", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "Bz7Chv_TA90", poster: "/images/thumbs/Bz7Chv_TA90.jpg", isVertical: true },
             { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "5TcG-SXNxqg", poster: "/images/thumbs/5TcG-SXNxqg.jpg", isVertical: true },
-            { id: "ai-adv-8", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "JU4HkqAuxQk", poster: "/images/thumbs/JU4HkqAuxQk.jpg", isVertical: true },
+            { id: "ai-adv-3", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "LTbDSu4Kg_4", poster: "/images/thumbs/LTbDSu4Kg_4.jpg", isVertical: true },
             { id: "ai-adv-9", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "C9CtqgNNbjw", poster: "/images/thumbs/C9CtqgNNbjw.jpg", isVertical: true },
             { id: "ai-cart-1", title: "Animated Cartoon Feature", tag: "Animation", type: "youtube", videoId: "B3Yjbh1rXqg", poster: "/images/thumbs/B3Yjbh1rXqg.jpg", isVertical: true },
             { id: "ai-adv-10", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "-BdDyhrFpxo", poster: "/images/thumbs/-BdDyhrFpxo.jpg", isVertical: true },
-            { id: "ai-adv-11", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "YffQvvydbz0", poster: "/images/thumbs/YffQvvydbz0.jpg", isVertical: true },
+            { id: "ai-adv-2", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "sJhBE6H2PMY", isVertical: true },
           ]
         },
         {
