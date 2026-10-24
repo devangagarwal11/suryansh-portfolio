@@ -286,7 +286,7 @@ const AllWork = () => {
         {
           name: "AI/DTC",
           items: [
-            { id: "ai-adv-1", title: "Visual Storytelling", tag: "Visual", type: "youtube", videoId: "_-egdW6Ca5Y", isVertical: true },
+            { id: "ai-adv-1", title: "Visual Storytelling", tag: "Visual", type: "youtube", videoId: "QMbXjcB3Xsg", isVertical: true },
             { id: "ai-adv-2", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "sJhBE6H2PMY", isVertical: true },
             // { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789548674/UGC_26_Huevia_V2.mp4", isVertical: true },
             { id: "ai-adv-3", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "LTbDSu4Kg_4", poster: "/images/thumbs/LTbDSu4Kg_4.jpg", isVertical: true },
