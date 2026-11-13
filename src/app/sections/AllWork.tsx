@@ -294,7 +294,7 @@ const AllWork = () => {
             { id: "ai-cart-1", title: "Animated Cartoon Feature", tag: "Animation", type: "youtube", videoId: "B3Yjbh1rXqg", poster: "/images/thumbs/B3Yjbh1rXqg.jpg", isVertical: true },
             { id: "ai-adv-5", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "cPIQJytn_8U", poster: "/images/thumbs/cPIQJytn_8U.jpg", isVertical: true },
             { id: "ai-adv-9", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "C9CtqgNNbjw", poster: "/images/thumbs/C9CtqgNNbjw.jpg", isVertical: true },
-            { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "5TcG-SXNxqg", poster: "/images/thumbs/5TcG-SXNxqg.jpg", isVertical: true },
+            { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "EvyKp9Vw6tg", poster: "/images/thumbs/EvyKp9Vw6tg.jpg", isVertical: true },
             { id: "ai-adv-6", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "Bz7Chv_TA90", poster: "/images/thumbs/Bz7Chv_TA90.jpg", isVertical: true },
             { id: "ai-adv-10", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "-BdDyhrFpxo", poster: "/images/thumbs/-BdDyhrFpxo.jpg", isVertical: true },
             { id: "ai-adv-2", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "sJhBE6H2PMY", isVertical: true },
