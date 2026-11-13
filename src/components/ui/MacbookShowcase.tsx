@@ -15,7 +15,7 @@ interface FeaturedVideo {
 const featuredVideos: FeaturedVideo[] = [
   { id: "feat-1", title: "Nature Synthesis", category: "Landscape", videoId: "SFtXVIzt7QI" },
   { id: "feat-2", title: "Nature Synthesis", category: "Landscape", videoId: "81kVaenG2uM" },
-  { id: "feat-3", title: "Animated Cartoon Feature", category: "Cartoon", videoId: "B3Yjbh1rXqg" },
+  { id: "feat-3", title: "Animated Cartoon Feature", category: "Cartoon", videoId: "CSiToc9DXAo" },
   { id: "feat-4", title: "Performance Marketing", category: "Edits", videoId: "XSLiZ0sfFm0" },
   { id: "feat-5", title: "AI Storytelling", category: "AI Story", videoId: "CJLH_LOea24" },
   { id: "feat-6", title: "Nature Synthesis", category: "Landscape", videoId: "-HR2t46Vx_s" },
