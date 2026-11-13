@@ -12,12 +12,15 @@ import { MacbookShowcase } from '@/components/ui/MacbookShowcase';
 import { TextScramble } from '@/components/ui/text-scramble';
 import { startSmoothScroll, stopSmoothScroll, scrollToTarget } from '@/lib/scroll';
 import { useYouTubePlayer, isMousePointer, ytThumb, onThumbLoad } from '@/lib/youtube';
+import { useWistiaPlayer, wistiaEmbedClass, wistiaIframeSrc } from '@/lib/wistia';
 interface WorkItem {
   id: string;
   title: string;
   tag: string;
-  type: 'youtube' | 'cloudinary' | 'image';
+  type: 'youtube' | 'wistia' | 'cloudinary' | 'image';
   videoId?: string;
+  mediaId?: string;   // Wistia hashed media id (type: 'wistia')
+  youtubeId?: string; // previous YouTube id, kept for rollback
   src?: string;
   poster?: string;
   isVertical?: boolean;
@@ -33,11 +36,13 @@ const PAUSE_PREVIEWS_EVENT = 'allwork:pause-previews';
 // page no longer loads 20+ players while scrolling.
 const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any, isUnmuted: boolean, setUnmutedId: (id: string | null) => void }) => {
   const isYouTube = item.type === 'youtube';
+  const isWistia = item.type === 'wistia';
   const isVideoFile = item.type === 'video' || (item.type === 'cloudinary' && item.src?.endsWith('.mp4'));
-  const isPlayable = isYouTube || isVideoFile;
+  const isPlayable = isYouTube || isWistia || isVideoFile;
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  const wistiaRef = React.useRef<HTMLDivElement>(null);
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const hoveringRef = React.useRef(false);
 
@@ -45,12 +50,14 @@ const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any,
   const [mounted, setMounted] = React.useState(false); // player created on first hover
   const [fileReady, setFileReady] = React.useState(false);
   const { play: ytPlay, pause: ytPause, setMuted: ytSetMuted, onIframeLoad, isPlaying: ytPlaying } = useYouTubePlayer(iframeRef);
+  const { play: wPlay, pause: wPause, setMuted: wSetMuted, isPlaying: wPlaying } = useWistiaPlayer(wistiaRef, item.mediaId, mounted && isWistia);
 
   const start = () => {
     hoveringRef.current = true;
     setHovering(true);
     setMounted(true);
     if (isYouTube) ytPlay();
+    else if (isWistia) wPlay();
     else videoRef.current?.play().catch(() => {});
   };
 
@@ -58,8 +65,9 @@ const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any,
     hoveringRef.current = false;
     setHovering(false);
     if (isYouTube) ytPause();
+    else if (isWistia) wPause();
     else videoRef.current?.pause();
-  }, [isYouTube, ytPause]);
+  }, [isYouTube, ytPause, isWistia, wPause]);
 
   const stop = () => {
     halt();
@@ -84,15 +92,16 @@ const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any,
   // Keep sound in sync with the shared "which card is unmuted" state.
   React.useEffect(() => {
     if (isYouTube) ytSetMuted(!isUnmuted);
+    else if (isWistia) wSetMuted(!isUnmuted);
     else if (videoRef.current) videoRef.current.muted = !isUnmuted;
-  }, [isUnmuted, isYouTube, ytSetMuted]);
+  }, [isUnmuted, isYouTube, ytSetMuted, isWistia, wSetMuted]);
 
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation(); // don't open the full player
     setUnmutedId(isUnmuted ? null : item.id);
   };
 
-  const playing = isYouTube ? ytPlaying && hovering : hovering && fileReady;
+  const playing = isYouTube ? ytPlaying && hovering : isWistia ? wPlaying && hovering : hovering && fileReady;
 
   if (!isPlayable) {
     return (
@@ -131,6 +140,11 @@ const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any,
             tabIndex={-1}
             onLoad={onIframeLoad}
           />
+        </div>
+      )}
+      {mounted && isWistia && (
+        <div className="absolute inset-0 w-full h-full pointer-events-none">
+          <div ref={wistiaRef} className={cn(wistiaEmbedClass(item.mediaId), "w-full h-full")} />
         </div>
       )}
       {isVideoFile && (
@@ -292,7 +306,7 @@ const AllWork = () => {
             { id: "ai-adv-8", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "JU4HkqAuxQk", poster: "/images/thumbs/JU4HkqAuxQk.jpg", isVertical: true },
             { id: "ai-adv-11", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "YffQvvydbz0", poster: "/images/thumbs/YffQvvydbz0.jpg", isVertical: true },
             { id: "ai-cart-1", title: "Animated Cartoon Feature", tag: "Animation", type: "youtube", videoId: "CSiToc9DXAo", poster: "/images/thumbs/CSiToc9DXAo.jpg", isVertical: true },
-            { id: "ai-adv-5", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "6HDJblgyXKM", poster: "/images/thumbs/6HDJblgyXKM.jpg", isVertical: true },
+            { id: "ai-adv-5", title: "Product Advertisement 01", tag: "Ad", type: "wistia", mediaId: "spvrevyyyp", youtubeId: "6HDJblgyXKM", poster: "/images/thumbs/6HDJblgyXKM.jpg", isVertical: true },
             { id: "ai-adv-9", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "zx4INDdzhEQ", poster: "/images/thumbs/zx4INDdzhEQ.jpg", isVertical: true },
             { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "EvyKp9Vw6tg", poster: "/images/thumbs/EvyKp9Vw6tg.jpg", isVertical: true },
             { id: "ai-adv-6", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "j0F4Le1hCyM", poster: "/images/thumbs/j0F4Le1hCyM.jpg", isVertical: true },
@@ -686,6 +700,14 @@ const AllWork = () => {
                   src={`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1&rel=0&modestbranding=1`}
                   className="w-full h-full border-none"
                   allow="autoplay; encrypted-media; fullscreen"
+                  allowFullScreen
+                  title={selectedVideo.title}
+                />
+              ) : selectedVideo.type === 'wistia' && selectedVideo.mediaId ? (
+                <iframe
+                  src={wistiaIframeSrc(selectedVideo.mediaId)}
+                  className="w-full h-full border-none"
+                  allow="autoplay; fullscreen"
                   allowFullScreen
                   title={selectedVideo.title}
                 />
