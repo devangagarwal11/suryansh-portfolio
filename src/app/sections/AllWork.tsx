@@ -322,8 +322,8 @@ const AllWork = () => {
             // { id: "ai-land-2", title: "Atmospheric Environment", tag: "Landscape", type: "youtube", videoId: "xC_v-LddSJI" },
             // { id: "ai-land-3", title: "Ethereal Worlds", tag: "Landscape", type: "youtube", videoId: "QGRvL-vvtBI" },
             // { id: "ai-land-4", title: "Island", tag: "Landscape", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787478552/Island_1.mp4" },
-            { id: "ai-story-1", title: "AI Visual Journey", tag: "Story", type: "youtube", videoId: "DuD_8TXKV_E", poster: "/images/thumbs/DuD_8TXKV_E.jpg", isSquare: true },
-            { id: "ai-story-2", title: "Cyberpunk Narrative", tag: "Story", type: "youtube", videoId: "WJS5_laqbno", poster: "/images/thumbs/WJS5_laqbno.jpg", isSquare: true }
+            { id: "ai-story-1", title: "AI Visual Journey", tag: "Story", type: "youtube", videoId: "DuD_8TXKV_E", isSquare: true },
+            { id: "ai-story-2", title: "Cyberpunk Narrative", tag: "Story", type: "youtube", videoId: "WJS5_laqbno", isSquare: true }
           ]
         },
       ]
@@ -340,7 +340,7 @@ const AllWork = () => {
             { id: "saas-1", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "pzTZtvfVRRA", poster: "/images/thumbs/pzTZtvfVRRA.jpg" },
             { id: "saas-2", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "XSLiZ0sfFm0", poster: "/images/thumbs/XSLiZ0sfFm0.jpg" },
             { id: "saas-3", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "CJLH_LOea24", poster: "/images/thumbs/CJLH_LOea24.jpg" },
-            { id: "saas-4", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "-HR2t46Vx_s", poster: "/images/thumbs/-HR2t46Vx_s.jpg" },
+            { id: "saas-4", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "-HR2t46Vx_s" },
           ]
         },
         {
