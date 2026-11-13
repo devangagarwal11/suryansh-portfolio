@@ -300,19 +300,19 @@ const AllWork = () => {
         {
           name: "AI DTC Videos",
           items: [
-            { id: "ai-adv-1", title: "Visual Storytelling", tag: "Visual", type: "youtube", videoId: "QMbXjcB3Xsg", poster: "/images/thumbs/QMbXjcB3Xsg.jpg", isVertical: true },
-            { id: "ai-adv-4", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "9Un86woHKI8", poster: "/images/thumbs/9Un86woHKI8.jpg", isVertical: true },
+            { id: "ai-adv-1", title: "Visual Storytelling", tag: "Visual", type: "wistia", mediaId: "jjgs0oad4h", youtubeId: "QMbXjcB3Xsg", poster: "/images/thumbs/QMbXjcB3Xsg.jpg", isVertical: true },
+            { id: "ai-adv-4", title: "Product Advertisement 01", tag: "Ad", type: "wistia", mediaId: "uo3uqdkseo", youtubeId: "9Un86woHKI8", poster: "/images/thumbs/9Un86woHKI8.jpg", isVertical: true },
             // { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1789548674/UGC_26_Huevia_V2.mp4", isVertical: true },
-            { id: "ai-adv-8", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "JU4HkqAuxQk", poster: "/images/thumbs/JU4HkqAuxQk.jpg", isVertical: true },
+            { id: "ai-adv-8", title: "Product Advertisement 01", tag: "Ad", type: "wistia", mediaId: "m50ddtymbd", youtubeId: "JU4HkqAuxQk", poster: "/images/thumbs/JU4HkqAuxQk.jpg", isVertical: true },
             { id: "ai-adv-11", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "YffQvvydbz0", poster: "/images/thumbs/YffQvvydbz0.jpg", isVertical: true },
-            { id: "ai-cart-1", title: "Animated Cartoon Feature", tag: "Animation", type: "youtube", videoId: "CSiToc9DXAo", poster: "/images/thumbs/CSiToc9DXAo.jpg", isVertical: true },
+            { id: "ai-cart-1", title: "Animated Cartoon Feature", tag: "Animation", type: "wistia", mediaId: "fhq78cfwj9", youtubeId: "CSiToc9DXAo", poster: "/images/thumbs/CSiToc9DXAo.jpg", isVertical: true },
             { id: "ai-adv-5", title: "Product Advertisement 01", tag: "Ad", type: "wistia", mediaId: "spvrevyyyp", youtubeId: "6HDJblgyXKM", poster: "/images/thumbs/6HDJblgyXKM.jpg", isVertical: true },
-            { id: "ai-adv-9", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "zx4INDdzhEQ", poster: "/images/thumbs/zx4INDdzhEQ.jpg", isVertical: true },
-            { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "EvyKp9Vw6tg", poster: "/images/thumbs/EvyKp9Vw6tg.jpg", isVertical: true },
-            { id: "ai-adv-6", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "j0F4Le1hCyM", poster: "/images/thumbs/j0F4Le1hCyM.jpg", isVertical: true },
+            { id: "ai-adv-9", title: "Product Advertisement 01", tag: "Ad", type: "wistia", mediaId: "0ebn2rfsaz", youtubeId: "zx4INDdzhEQ", poster: "/images/thumbs/zx4INDdzhEQ.jpg", isVertical: true },
+            { id: "ai-adv-7", title: "Product Advertisement 01", tag: "Ad", type: "wistia", mediaId: "o4jsjywren", youtubeId: "EvyKp9Vw6tg", poster: "/images/thumbs/EvyKp9Vw6tg.jpg", isVertical: true },
+            { id: "ai-adv-6", title: "Product Advertisement 01", tag: "Ad", type: "wistia", mediaId: "mhsvset999", youtubeId: "j0F4Le1hCyM", poster: "/images/thumbs/j0F4Le1hCyM.jpg", isVertical: true },
             { id: "ai-adv-10", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "-BdDyhrFpxo", poster: "/images/thumbs/-BdDyhrFpxo.jpg", isVertical: true },
-            { id: "ai-adv-2", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "N3lV-ylE2Oc", poster: "/images/thumbs/N3lV-ylE2Oc.jpg", isVertical: true },
-            { id: "ai-adv-3", title: "Product Advertisement 01", tag: "Ad", type: "youtube", videoId: "LTbDSu4Kg_4", poster: "/images/thumbs/LTbDSu4Kg_4.jpg", isVertical: true },
+            { id: "ai-adv-2", title: "Product Advertisement 01", tag: "Ad", type: "wistia", mediaId: "oujxv7iycc", youtubeId: "N3lV-ylE2Oc", poster: "/images/thumbs/N3lV-ylE2Oc.jpg", isVertical: true },
+            { id: "ai-adv-3", title: "Product Advertisement 01", tag: "Ad", type: "wistia", mediaId: "jf19j71ura", youtubeId: "LTbDSu4Kg_4", poster: "/images/thumbs/LTbDSu4Kg_4.jpg", isVertical: true },
           ]
         },
         {
@@ -322,8 +322,8 @@ const AllWork = () => {
             // { id: "ai-land-2", title: "Atmospheric Environment", tag: "Landscape", type: "youtube", videoId: "xC_v-LddSJI" },
             // { id: "ai-land-3", title: "Ethereal Worlds", tag: "Landscape", type: "youtube", videoId: "QGRvL-vvtBI" },
             // { id: "ai-land-4", title: "Island", tag: "Landscape", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787478552/Island_1.mp4" },
-            { id: "ai-story-1", title: "AI Visual Journey", tag: "Story", type: "youtube", videoId: "DuD_8TXKV_E", isSquare: true },
-            { id: "ai-story-2", title: "Cyberpunk Narrative", tag: "Story", type: "youtube", videoId: "WJS5_laqbno", isSquare: true }
+            { id: "ai-story-1", title: "AI Visual Journey", tag: "Story", type: "youtube", videoId: "DuD_8TXKV_E", poster: "/images/thumbs/DuD_8TXKV_E.jpg", isSquare: true },
+            { id: "ai-story-2", title: "Cyberpunk Narrative", tag: "Story", type: "youtube", videoId: "WJS5_laqbno", poster: "/images/thumbs/WJS5_laqbno.jpg", isSquare: true }
           ]
         },
       ]
@@ -340,7 +340,7 @@ const AllWork = () => {
             { id: "saas-1", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "pzTZtvfVRRA", poster: "/images/thumbs/pzTZtvfVRRA.jpg" },
             { id: "saas-2", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "XSLiZ0sfFm0", poster: "/images/thumbs/XSLiZ0sfFm0.jpg" },
             { id: "saas-3", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "CJLH_LOea24", poster: "/images/thumbs/CJLH_LOea24.jpg" },
-            { id: "saas-4", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "-HR2t46Vx_s" },
+            { id: "saas-4", title: "SAAS 1", tag: "SAAS", type: "youtube", videoId: "-HR2t46Vx_s", poster: "/images/thumbs/-HR2t46Vx_s.jpg" },
           ]
         },
         {
