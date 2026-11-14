@@ -88,7 +88,7 @@ export function AdPerformanceHero({ resultsId }: { resultsId?: string }) {
               ref={(el) => {
                 vidRefs.current[i] = el;
               }}
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover object-top"
               src={`/videos/${name}.mp4`}
               poster={`/videos/${name}.jpg`}
               muted
@@ -103,7 +103,9 @@ export function AdPerformanceHero({ resultsId }: { resultsId?: string }) {
       </div>
 
       {/* legibility: dark at the bottom, lighter mid-frame, soft top edge into the section */}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,#080808_0%,rgba(8,8,8,.9)_28%,rgba(8,8,8,.55)_50%,rgba(8,8,8,.2)_72%,rgba(8,8,8,.6)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,#080808_0%,rgba(8,8,8,.9)_28%,rgba(8,8,8,.55)_50%,rgba(8,8,8,.15)_72%,rgba(8,8,8,.3)_100%)]" />
+      {/* the reel rises out of the page background instead of starting on a hard edge */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 md:h-56 bg-[linear-gradient(to_bottom,#080808_0%,rgba(8,8,8,.92)_18%,rgba(8,8,8,.7)_38%,rgba(8,8,8,.4)_60%,rgba(8,8,8,.15)_80%,rgba(8,8,8,0)_100%)]" />
 
       <div className="absolute inset-x-0 bottom-0">
         <div className="mx-auto max-w-[1400px] px-6 pb-10 md:px-12 md:pb-14">
