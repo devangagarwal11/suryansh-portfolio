@@ -81,7 +81,7 @@ export const Hero = () => {
               delay={0.8}
               className="text-base md:text-xl text-white/60 max-w-xl leading-relaxed"
             >
-              Video Creative Director. YC launch videos and DTC ads for 8 and 9 figure brands.
+              Lead Editor at a 9-figure DTC brand. YC launch videos and DTC ads for 8 and 9 figure brands.
             </TextEffect>
           </div>
 
