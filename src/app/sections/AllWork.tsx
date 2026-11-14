@@ -13,6 +13,8 @@ import { TextScramble } from '@/components/ui/text-scramble';
 import { startSmoothScroll, stopSmoothScroll, scrollToTarget } from '@/lib/scroll';
 import { useYouTubePlayer, isMousePointer, ytThumb, onThumbLoad } from '@/lib/youtube';
 import { useWistiaPlayer, wistiaEmbedClass, wistiaIframeSrc } from '@/lib/wistia';
+import { AdPerformance } from '@/components/ui/AdPerformance';
+import { AdPerformanceHero } from '@/components/ui/AdPerformanceHero';
 interface WorkItem {
   id: string;
   title: string;
@@ -229,7 +231,7 @@ const JUMP_GROUPS = [
     label: 'Videos',
     links: [
       { label: 'AI/DTC', id: `work-sub-${workSlug('AI DTC Videos')}` },
-      { label: 'AI Film Making/Microdramas', id: `work-sub-${workSlug('AI FILM MAKING/MICRODRAMAS')}` },
+      { label: 'Ad Performance', id: `work-sub-${workSlug('Ad Performance')}` },
       { label: 'Launch/SAAS Videos', id: `work-sub-${workSlug('Launch/SAAS Videos')}` },
       { label: 'Talking Head Videos', id: `work-sub-${workSlug('Talking head Videos')}` },
     ],
@@ -316,15 +318,8 @@ const AllWork = () => {
           ]
         },
         {
-          name: "AI FILM MAKING/MICRODRAMAS",
-          items: [
-            { id: "ai-land-1", title: "Nature Synthesis", tag: "Visual Art", type: "youtube", videoId: "d3HpHGpXFuE" },
-            // { id: "ai-land-2", title: "Atmospheric Environment", tag: "Landscape", type: "youtube", videoId: "xC_v-LddSJI" },
-            // { id: "ai-land-3", title: "Ethereal Worlds", tag: "Landscape", type: "youtube", videoId: "QGRvL-vvtBI" },
-            // { id: "ai-land-4", title: "Island", tag: "Landscape", type: "video", src: "https://res.cloudinary.com/v79qntig/video/upload/v1787478552/Island_1.mp4" },
-            { id: "ai-story-1", title: "AI Visual Journey", tag: "Story", type: "youtube", videoId: "DuD_8TXKV_E", isSquare: true },
-            { id: "ai-story-2", title: "Cyberpunk Narrative", tag: "Story", type: "youtube", videoId: "WJS5_laqbno", isSquare: true }
-          ]
+          name: "Ad Performance",
+          items: []
         },
       ]
     },
@@ -537,7 +532,28 @@ const AllWork = () => {
                     </div>
                   )}
 
-                  {category.name === "Menu" ? (
+                  {sub.name === "Ad Performance" ? (
+                    <>
+                    <AdPerformance
+                      cases={[
+                        {
+                          id: "mida",
+                          brand: "Mida Theory",
+                          adName: "Mida × Penrose",
+                          thumbnail: "/images/performance/mida-penrose-winner.jpg",
+                          mediaId: "o4jsjywren",
+                          badge: "Winner",
+                          hero: { kind: "cpa", value: 25, caption: "Became Mida Theory's new winning ad on Meta, bringing in customers at a cost the brand called “really cheap”." },
+                          status: { title: "New winner", sub: "The brand's best-performing ad" },
+                          details: [["Format", "Video"], ["Style", "AI 3D animation"], ["Platform", "Meta"], ["Product", "Body butter"]],
+                        },
+                      ]}
+                    />
+                    <div className="mt-16 md:mt-24">
+                      <AdPerformanceHero />
+                    </div>
+                    </>
+                  ) : category.name === "Menu" ? (
                     <Flipbook items={sub.items as any} />
                   ) : category.name === "Carousel" || category.name === "Post Designs" ? (
                     <div className="flex flex-col gap-10 -mx-12 overflow-hidden py-4">
