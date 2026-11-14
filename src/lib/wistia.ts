@@ -18,6 +18,7 @@ interface WistiaVideo {
   unmute(): void;
   bind(event: string, callback: () => void): void;
   unbind(event: string, callback: () => void): void;
+  remove(): void;
 }
 
 type WistiaQueueItem = Record<string, unknown>;
@@ -62,6 +63,8 @@ const PREVIEW_OPTIONS = {
   playPauseNotifier: false,
   copyLinkAndThumbnailEnabled: false,
   seo: false,
+  // previews play inside a small card: cap the stream at 540p so hovering doesn't pull full-HD video
+  qualityMax: 540,
 };
 
 /** Class names for a preview container: `<div ref={...} className={wistiaEmbedClass(id)} />`. */
@@ -121,6 +124,12 @@ export function useWistiaPlayer(
         video.unbind("play", onPlay);
         video.unbind("pause", onStop);
         video.unbind("end", onStop);
+        // tear the player down so it stops buffering in the background
+        try {
+          video.remove();
+        } catch {
+          /* already gone */
+        }
       }
       videoRef.current = null;
       setIsPlaying(false);

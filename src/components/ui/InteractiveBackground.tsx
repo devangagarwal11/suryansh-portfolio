@@ -25,32 +25,43 @@ export function InteractiveBackground() {
     let x = targetX;
     let y = targetY;
     let rafId = 0;
+    // measured once (and on resize) instead of every frame: reading offsetWidth in the loop forced
+    // a layout on every frame
+    let half = glow.offsetWidth / 2;
+    const onResize = () => (half = glow.offsetWidth / 2);
+
+    // the loop only runs while the glow is still catching up, then sleeps until the mouse moves
+    const loop = () => {
+      x += (targetX - x) * 0.08;
+      y += (targetY - y) * 0.08;
+      glow.style.transform = `translate3d(${x - half}px, ${y - half}px, 0)`;
+      rafId = Math.abs(targetX - x) + Math.abs(targetY - y) > 0.5 ? requestAnimationFrame(loop) : 0;
+    };
+    const wake = () => {
+      if (!rafId && !document.hidden) rafId = requestAnimationFrame(loop);
+    };
 
     const onMove = (e: MouseEvent) => {
       targetX = e.clientX;
       targetY = e.clientY;
-    };
-
-    const loop = () => {
-      x += (targetX - x) * 0.08;
-      y += (targetY - y) * 0.08;
-      const half = glow.offsetWidth / 2;
-      glow.style.transform = `translate3d(${x - half}px, ${y - half}px, 0)`;
-      rafId = requestAnimationFrame(loop);
+      wake();
     };
 
     const onVisibility = () => {
       cancelAnimationFrame(rafId);
-      if (!document.hidden) rafId = requestAnimationFrame(loop);
+      rafId = 0;
+      wake();
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("resize", onResize);
     document.addEventListener("visibilitychange", onVisibility);
-    rafId = requestAnimationFrame(loop);
+    wake();
 
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("resize", onResize);
       document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);

@@ -13,6 +13,12 @@ interface FlipbookProps {
   }[];
 }
 
+/** Cloudinary originals are ~1.5 MB each; serve a right-sized, auto-format copy (sharp on retina). */
+const pageSrc = (url?: string) =>
+  url && url.includes("res.cloudinary.com") && url.includes("/upload/") && !url.includes("/upload/q_")
+    ? url.replace("/upload/", "/upload/q_auto,f_auto,w_1200/")
+    : url || "";
+
 export function Flipbook({ items }: FlipbookProps) {
   const [currentSheet, setCurrentSheet] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -183,7 +189,7 @@ export function Flipbook({ items }: FlipbookProps) {
                     <div className="relative w-full h-full flex flex-col p-1.5 xs:p-2 sm:p-2.5">
                       <div className="relative w-full flex-1 rounded-[0.8rem] sm:rounded-[1.2rem] overflow-hidden bg-[#0a0a0a] border border-white/5 shadow-inner">
                         <img 
-                          src={frontPage.src || ""} 
+                          src={pageSrc(frontPage.src)} 
                           alt={frontPage.title}
                           className="w-full h-full object-contain pointer-events-none"
                           loading="lazy"
@@ -235,7 +241,7 @@ export function Flipbook({ items }: FlipbookProps) {
                     <div className="relative w-full h-full flex flex-col p-1.5 xs:p-2 sm:p-2.5">
                       <div className="relative w-full flex-1 rounded-[0.8rem] sm:rounded-[1.2rem] overflow-hidden bg-[#0a0a0a] border border-white/5 shadow-inner">
                         <img 
-                          src={backPage.src || ""} 
+                          src={pageSrc(backPage.src)} 
                           alt={backPage.title}
                           className="w-full h-full object-contain pointer-events-none"
                           loading="lazy"

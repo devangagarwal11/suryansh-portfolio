@@ -52,35 +52,52 @@ export const About = () => {
     }
   ];
 
-  const experience = [
+  // Official company marks (from each company's own site), shown beside role + location.
+  //  - wordmark: the brand's own wordmark on its brand colour (Smooche's official share-card look)
+  //  - fill: app-style icon that already has its own background
+  //  - plate: transparent mark that needs a light plate to read on the dark card
+  type Logo = { src: string; alt: string; kind: "wordmark" | "fill" | "plate"; bg?: string };
+  const experience: { role: string; company: string; loaction: string; desc: string; logo?: Logo }[] = [
+    {
+      role: "Video Editor Lead",
+      company: "Smooche",
+      loaction: "United States",
+      desc: "Video Editor Lead managing multiple editing pods. I rolled out my Claude-powered AI workflow across the team, lifting both the speed and the quality of every ad, and the pod editors improved significantly. I work closely with strategists on creative briefs, cracking the customer psychology behind winning concepts, and keep researching advanced tools that push our output and win rate further.",
+      logo: { src: "/images/logos/company-smooche.svg", alt: "Smooche", kind: "wordmark", bg: "#df8096" },
+    },
+    {
+      role: "AI Ad Creator",
+      company: "Mida Theory",
+      loaction: "United States",
+      desc: "Joined this brand-new startup in its launch month to build its AI video ads and statics. Within two weeks of joining, sales doubled (2x), turning a fresh launch into a brand that's already scaling.",
+      logo: { src: "/images/logos/company-mida.webp", alt: "Mida Theory", kind: "fill" },
+    },
     { 
       role: "Video Editor", 
       company: "Advanced Agent Mrketing", 
       loaction: "Greensboro, USA",
+      logo: { src: "/images/logos/company-aam.webp", alt: "Advanced Agent Marketing", kind: "fill" },
       desc: "Created performance-driven video ads that generated qualified client appointments and achieved high CTRs through conversion-focused editing, compelling storytelling, and continuous creative optimization."
-    },
-    { 
-      role: "Video Editor", 
-      company: "Modulate", 
-      loaction: "Somerville, USA",
-      desc: "Translated complex audio-related problems, solutions, and technical services into clear, engaging motion graphics and explainer videos, making sophisticated concepts easy to understand and visually compelling."
     },
     { 
       role: "Video Editor", 
       company: "Remotestar",
       loaction: "United Kingdom",
+      logo: { src: "/images/logos/company-remotestar.webp", alt: "Remotestar", kind: "plate" },
       desc: "Edited engaging digital video content with strong storytelling, pacing, sound design, transitions, and platform-focused visual optimization."
     },
     { 
       role: "Video Editor", 
       company: "Pocket FM",
       loaction: "Banglore, India",
+      logo: { src: "/images/logos/company-pocketfm.webp", alt: "Pocket FM", kind: "fill" },
       desc: "Part of the French content team, producing AI-assisted video episodes across multiple shows while maintaining narrative consistency, visual quality, and high-volume content production."
     },
     { 
       role: "Lead Video Editor", 
       company: "FRND app",
       loaction: "Banglore India",
+      logo: { src: "/images/logos/company-frnd.svg", alt: "FRND", kind: "fill" },
       desc: "Led the PlayChat POD as Lead Video Editor, delivering expert-level DTC ad creatives and AI-powered video content; produced top-performing winning ads on Meta through performance-driven creative strategy, rapid testing, and conversion-focused editing."
     },
     { 
@@ -236,14 +253,37 @@ export const About = () => {
                           {exp.desc}
                         </p>
                       </div>
-                      {/* Right: Role & Year */}
-                      <div className="md:col-span-5 flex flex-col gap-1 md:text-right md:items-end justify-start mt-2 md:mt-0">
-                        <span className="text-base text-white/40 group-hover:text-white/60 transition-colors">
-                          {exp.role}
-                        </span>
-                        <span className="text-sm font-mono text-white/10 group-hover:text-white/30 transition-colors uppercase whitespace-nowrap">
-                          {exp.loaction}
-                        </span>
+                      {/* Right: Role & Location, with the company's logo beside them */}
+                      <div className="md:col-span-5 flex flex-row-reverse md:flex-row items-start justify-end gap-4 mt-2 md:mt-0">
+                        <div className="flex flex-col gap-1 md:text-right md:items-end">
+                          <span className="text-base text-white/40 group-hover:text-white/60 transition-colors whitespace-nowrap">
+                            {exp.role}
+                          </span>
+                          <span className="text-sm font-mono text-white/10 group-hover:text-white/30 transition-colors uppercase whitespace-nowrap">
+                            {exp.loaction}
+                          </span>
+                        </div>
+                        {exp.logo && (
+                          <div
+                            className={
+                              exp.logo.kind === "wordmark"
+                                ? "flex h-10 shrink-0 items-center rounded-xl px-3 opacity-80 transition-opacity group-hover:opacity-100"
+                                : exp.logo.kind === "plate"
+                                ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white p-1.5 opacity-80 transition-opacity group-hover:opacity-100"
+                                : "h-10 w-10 shrink-0 overflow-hidden rounded-xl opacity-80 transition-opacity group-hover:opacity-100"
+                            }
+                            style={exp.logo.bg ? { background: exp.logo.bg } : undefined}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={exp.logo.src}
+                              alt={`${exp.logo.alt} logo`}
+                              loading="lazy"
+                              decoding="async"
+                              className={exp.logo.kind === "wordmark" ? "h-2.5 w-auto" : "h-full w-full object-contain"}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

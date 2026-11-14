@@ -10,7 +10,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { InteractiveBackground } from "@/components/ui/InteractiveBackground";
 import { siteConfig } from "@/lib/constants";
-import { CustomCursor } from "@/components/ui/CustomCursor";
+import { CursorLoader } from "@/components/ui/CursorLoader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -113,7 +113,7 @@ export default function RootLayout({
           <SmoothScrollProvider>
             <InteractiveBackground />
             <div className="grain-overlay" />
-            <CustomCursor />
+            <CursorLoader />
             {children}
           </SmoothScrollProvider>
         </ThemeProvider>

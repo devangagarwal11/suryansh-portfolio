@@ -33,6 +33,8 @@ export const MacbookShowcase = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
+  const hoverTimer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(hoverTimer.current), []);
   const {
     play,
     pause,
@@ -49,6 +51,39 @@ export const MacbookShowcase = () => {
   useEffect(() => {
     ytSetMuted(isMuted);
   }, [isMuted, ytSetMuted]);
+
+  // Creating the YouTube player stalls the page for a moment. On desktop, create it (paused) once the
+  // laptop is on screen and the visitor has stopped scrolling, so hovering later just plays it
+  // instantly instead of freezing mid-scroll. Phones and data-saver keep the tap-to-load behaviour.
+  useEffect(() => {
+    const el = screenRef.current;
+    if (!el || mounted) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if ((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) return;
+    let visible = false;
+    let timer = 0;
+    const arm = () => {
+      window.clearTimeout(timer);
+      if (!visible) return;
+      timer = window.setTimeout(() => {
+        const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number })
+          .requestIdleCallback;
+        if (idle) idle(() => visible && setMounted(true), { timeout: 1500 });
+        else setMounted(true);
+      }, 900); // 0.9 s without scrolling
+    };
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      arm();
+    });
+    io.observe(el);
+    window.addEventListener("scroll", arm, { passive: true });
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", arm);
+      window.clearTimeout(timer);
+    };
+  }, [mounted]);
 
   // Pause when the showcase scrolls out of view.
   useEffect(() => {
@@ -155,7 +190,8 @@ export const MacbookShowcase = () => {
   return (
     <div className="w-full flex flex-col items-center mb-24 relative">
       {/* Ambient glow behind laptop */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-white/[0.02] blur-[100px] rounded-full pointer-events-none" />
+      {/* soft glow: a radial gradient looks the same as the old 100px blur but costs nothing to draw */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-[radial-gradient(closest-side,rgba(255,255,255,0.02),rgba(255,255,255,0.012)_45%,transparent)] pointer-events-none" />
 
       <div className="relative w-full max-w-[960px] mx-auto flex items-center justify-center">
         {/* Left Arrow */}
@@ -193,17 +229,27 @@ export const MacbookShowcase = () => {
             <div className="relative w-full aspect-[1536/1024]">
               {/* Laptop Image */}
               <img 
-                src="/images/macbook-frame.png" 
+                src="/images/macbook-frame.webp" 
                 alt="MacBook Frame" 
-                className="absolute inset-0 w-full h-full object-contain pointer-events-none z-20 drop-shadow-2xl" 
+                className="absolute inset-0 w-full h-full object-contain pointer-events-none z-20" 
               />
               
               {/* Screen Content Area */}
               {/* Adjust these percentage values based on the actual screen position in the image */}
               <div 
                 ref={screenRef}
-                onPointerEnter={(e) => isMousePointer(e) && startPlayback()}
-                onPointerLeave={(e) => isMousePointer(e) && !isFullscreen && pause()}
+                onPointerEnter={(e) => {
+                  if (!isMousePointer(e)) return;
+                  // hover intent: if the player isn't created yet, only create it once the pointer rests
+                  // here, so a mouse that just slides over the screen mid-scroll doesn't stall the page
+                  window.clearTimeout(hoverTimer.current);
+                  if (mounted) startPlayback();
+                  else hoverTimer.current = window.setTimeout(startPlayback, 150);
+                }}
+                onPointerLeave={(e) => {
+                  window.clearTimeout(hoverTimer.current);
+                  if (isMousePointer(e) && !isFullscreen) pause();
+                }}
                 data-cursor="video"
                 className="absolute bg-black overflow-hidden z-10 group/screen"
                 style={{

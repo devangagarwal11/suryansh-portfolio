@@ -54,21 +54,43 @@ const MediaContent = React.memo(({ item, isUnmuted, setUnmutedId }: { item: any,
   const { play: ytPlay, pause: ytPause, setMuted: ytSetMuted, onIframeLoad, isPlaying: ytPlaying } = useYouTubePlayer(iframeRef);
   const { play: wPlay, pause: wPause, setMuted: wSetMuted, isPlaying: wPlaying } = useWistiaPlayer(wistiaRef, item.mediaId, mounted && isWistia);
 
+  // Hover intent: the player only loads if the pointer actually rests on the card. Cards that merely
+  // slide under a still mouse while the page scrolls no longer start downloading video.
+  const intentTimer = React.useRef<number | undefined>(undefined);
+  // A card left alone for a while drops its player, so it stops buffering in the background.
+  const unmountTimer = React.useRef<number | undefined>(undefined);
+  React.useEffect(() => () => {
+    window.clearTimeout(intentTimer.current);
+    window.clearTimeout(unmountTimer.current);
+  }, []);
+
   const start = () => {
     hoveringRef.current = true;
-    setHovering(true);
-    setMounted(true);
-    if (isYouTube) ytPlay();
-    else if (isWistia) wPlay();
-    else videoRef.current?.play().catch(() => {});
+    window.clearTimeout(unmountTimer.current);
+    window.clearTimeout(intentTimer.current);
+    intentTimer.current = window.setTimeout(() => {
+      if (!hoveringRef.current) return;
+      setHovering(true);
+      setMounted(true);
+      if (isYouTube) ytPlay();
+      else if (isWistia) wPlay();
+      else videoRef.current?.play().catch(() => {});
+    }, mounted ? 0 : 140);
   };
 
   const halt = React.useCallback(() => {
     hoveringRef.current = false;
+    window.clearTimeout(intentTimer.current);
     setHovering(false);
     if (isYouTube) ytPause();
     else if (isWistia) wPause();
     else videoRef.current?.pause();
+    if (isYouTube || isWistia) {
+      window.clearTimeout(unmountTimer.current);
+      unmountTimer.current = window.setTimeout(() => {
+        if (!hoveringRef.current) setMounted(false);
+      }, 8000);
+    }
   }, [isYouTube, ytPause, isWistia, wPause]);
 
   const stop = () => {

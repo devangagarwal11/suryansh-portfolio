@@ -71,13 +71,13 @@
 /* Hide the native cursor only where the custom cursor is actually rendered
    (mouse / trackpad). Touch devices keep default behaviour. */
 @media (hover: hover) and (pointer: fine) {
-  html,
-  html * {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
     cursor: none !important;
   }
 
-  .native-cursor,
-  .native-cursor * {
+  html.has-custom-cursor .native-cursor,
+  html.has-custom-cursor .native-cursor * {
     cursor: auto !important;
   }
 }

@@ -78,14 +78,17 @@ export default function ShootingStreaks() {
       };
     };
 
+    // Stars are 0.1-1.1 px, so a square of equal area looks identical to a circle and is far
+    // cheaper (no path building, no per-star colour string). Alpha goes through globalAlpha.
     const drawStars = (time: number) => {
+      ctx.fillStyle = "#fff";
       for (const star of stars) {
         const twinkle = Math.sin(time * star.twinkleSpeed) * 0.04;
-        ctx.fillStyle = `rgba(255,255,255,${Math.max(0, star.opacity + twinkle)})`;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.globalAlpha = Math.max(0, star.opacity + twinkle);
+        const side = star.size * 1.7725; // sqrt(pi) * r → same area as the old circle
+        ctx.fillRect(star.x - side / 2, star.y - side / 2, side, side);
       }
+      ctx.globalAlpha = 1;
     };
 
     let rafId = 0;

@@ -3,6 +3,7 @@
 import { RandomLetterSwapPingPong } from "@/components/ui/random-letter-swap";
 import { TextScramble } from "@/components/ui/text-scramble";
 import { SectionReveal } from "@/components/ui/SectionReveal";
+import { LazyLoopVideo } from "@/components/ui/LazyLoopVideo";
 
 /** The finished ad this workflow produced (Wistia, vertical 9:16). */
 const RESULT_MEDIA_ID = "p6ye60edvj";
@@ -14,18 +15,15 @@ export const Process = () => {
       {/* ── Part 1: the Claude-automated workflow, looping in the background ── */}
       <div className="relative">
         <div className="absolute inset-0" aria-hidden="true">
-          <video
+          {/* loads only as it nears the viewport, so it doesn't compete with the first screen */}
+          <LazyLoopVideo
             className="absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
             poster="/videos/process-loop-poster.jpg"
-          >
-            <source src="/videos/process-loop.mp4" type="video/mp4" />
-            <source src="/videos/process-loop.webm" type="video/webm" />
-          </video>
+            sources={[
+              { src: "/videos/process-loop.mp4", type: "video/mp4" },
+              { src: "/videos/process-loop.webm", type: "video/webm" },
+            ]}
+          />
           {/* 25% black overlay */}
           <div className="pointer-events-none absolute inset-0 bg-black/25" />
           {/* blend into the dark sections above and below */}
